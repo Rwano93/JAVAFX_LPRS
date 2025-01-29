@@ -16,8 +16,6 @@ module com.example.javafx_lprs {
 
     opens com.gestionevenements.models to javafx.fxml;
     exports com.gestionevenements.models;
-    exports com.gestionevenements;
-    opens com.gestionevenements to javafx.fxml;
 
 
 }

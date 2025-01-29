@@ -7,6 +7,7 @@ import com.gestionevenements.models.DossierInscription;
 import com.gestionevenements.utils.PasswordGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class InscriptionService {
 

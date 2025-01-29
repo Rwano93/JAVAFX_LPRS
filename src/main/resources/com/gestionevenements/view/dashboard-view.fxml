@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.DashboardController">
+    <top>
+        <MenuBar>
+            <Menu text="Fichier">
+                <MenuItem text="Déconnexion" onAction="#handleLogout"/>
+            </Menu>
+            <Menu text="Gestion">
+                <MenuItem text="Étudiants" onAction="#showEtudiantsView"/>
+                <MenuItem text="Rendez-vous" onAction="#showRendezVousView"/>
+                <MenuItem text="Fournitures" onAction="#showFournituresView"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label text="Tableau de bord" styleClass="title-label"/>
+            <GridPane hgap="10" vgap="10" alignment="CENTER">
+                <Button text="Gestion des étudiants" onAction="#showEtudiantsView" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Button text="Gestion des rendez-vous" onAction="#showRendezVousView" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Button text="Gestion des fournitures" onAction="#showFournituresView" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Button text="Rapports" onAction="#showReportsView" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            </GridPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label fx:id="userInfoLabel" text="Connecté en tant que: "/>
+        </HBox>
+    </bottom>
+</BorderPane>
+

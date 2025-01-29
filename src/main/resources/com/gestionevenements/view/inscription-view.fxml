@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.gestionevenements.controllers.InscriptionController"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.InscriptionController"
+      spacing="10" alignment="CENTER" styleClass="form-container">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-</AnchorPane>
+    <Label text="Inscription" styleClass="title-label"/>
+
+    <TextField fx:id="nomField" promptText="Nom" styleClass="form-field"/>
+    <TextField fx:id="prenomField" promptText="Prénom" styleClass="form-field"/>
+    <TextField fx:id="emailField" promptText="Email" styleClass="form-field"/>
+    <TextField fx:id="telephoneField" promptText="Téléphone" styleClass="form-field"/>
+    <TextField fx:id="adresseField" promptText="Adresse" styleClass="form-field"/>
+    <TextField fx:id="dernierDiplomeField" promptText="Dernier diplôme" styleClass="form-field"/>
+    <TextField fx:id="filiereInteretField" promptText="Filière d'intérêt" styleClass="form-field"/>
+    <DatePicker fx:id="dateInscriptionPicker" promptText="Date d'inscription" styleClass="form-field"/>
+    <TextArea fx:id="motivationsArea" promptText="Motivations" styleClass="form-field" wrapText="true"/>
+
+    <Button text="S'inscrire" onAction="#handleInscription" styleClass="submit-button"/>
+</VBox>
+

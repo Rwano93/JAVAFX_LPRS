@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.gestionevenements.StockView"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.StockController"
+      spacing="10" alignment="CENTER" styleClass="form-container">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-</AnchorPane>
+    <Label text="Gestion des stocks" styleClass="title-label"/>
+
+    <GridPane hgap="10" vgap="10">
+        <TextField fx:id="nomProduitField" promptText="Nom du produit" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-field"/>
+        <TextField fx:id="quantiteField" promptText="Quantité" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-field"/>
+        <TextField fx:id="emplacementField" promptText="Emplacement" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-field"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Ajouter" onAction="#handleAjouterStock" styleClass="submit-button"/>
+        <Button text="Modifier" onAction="#handleModifierStock" styleClass="edit-button"/>
+        <Button text="Supprimer" onAction="#handleSupprimerStock" styleClass="delete-button"/>
+    </HBox>
+
+    <TableView fx:id="stockTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="Nom du produit" fx:id="nomProduitColumn"/>
+            <TableColumn text="Quantité" fx:id="quantiteColumn"/>
+            <TableColumn text="Emplacement" fx:id="emplacementColumn"/>
+        </columns>
+    </TableView>
+</VBox>
+

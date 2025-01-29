@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.gestionevenements.EtudiantView"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.EtudiantController"
+      spacing="10" alignment="CENTER" styleClass="form-container">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-</AnchorPane>
+    <Label text="Gestion des étudiants" styleClass="title-label"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Ajouter" onAction="#handleAjouterEtudiant" styleClass="add-button"/>
+        <Button text="Modifier" onAction="#handleModifierEtudiant" styleClass="edit-button"/>
+        <Button text="Supprimer" onAction="#handleSupprimerEtudiant" styleClass="delete-button"/>
+    </HBox>
+
+    <TableView fx:id="etudiantTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="Nom" fx:id="nomColumn"/>
+            <TableColumn text="Prénom" fx:id="prenomColumn"/>
+            <TableColumn text="Email" fx:id="emailColumn"/>
+        </columns>
+    </TableView>
+</VBox>
+

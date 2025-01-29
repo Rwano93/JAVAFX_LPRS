@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.gestionevenements.controllers.LoginController"
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.LoginController"
             prefHeight="400.0" prefWidth="600.0">
-
+    <children>
+        <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+              AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+            <Label text="Gestion d'Événements" style="-fx-font-size: 24px;"/>
+            <TextField fx:id="emailField" promptText="Email" maxWidth="300"/>
+            <PasswordField fx:id="passwordField" promptText="Mot de passe" maxWidth="300"/>
+            <Button text="Connexion" onAction="#handleLogin" maxWidth="300"/>
+        </VBox>
+    </children>
 </AnchorPane>
+

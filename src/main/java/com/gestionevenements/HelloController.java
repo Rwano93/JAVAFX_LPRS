@@ -1,4 +1,4 @@
-package com;
+package com.gestionevenements;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

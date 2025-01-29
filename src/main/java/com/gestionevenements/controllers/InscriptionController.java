@@ -51,7 +51,6 @@ public class InscriptionController {
 
             boolean inscriptionReussie = inscriptionService.inscrireEtudiant(
                     etudiant,
-                    dateInscriptionPicker.getValue(),
                     filiereInteretField.getText(),
                     motivationsArea.getText()
             );
@@ -95,3 +94,4 @@ public class InscriptionController {
         alert.showAndWait();
     }
 }
+

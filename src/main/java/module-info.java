@@ -9,4 +9,6 @@ module com.example.javafx_lprs {
     exports com;
     exports com;
     opens com to javafx.fxml;
+    exports com.gestionevenements;
+    opens com.gestionevenements to javafx.fxml;
 }

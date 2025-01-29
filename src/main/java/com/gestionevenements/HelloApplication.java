@@ -1,4 +1,4 @@
-package com;
+package com.gestionevenements;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

@@ -88,7 +88,6 @@ public class FournitureController {
         libelleField.clear();
         descriptionArea.clear();
         quantiteField.clear();
-
         fournisseurComboBox.setValue(null);
         prixField.clear();
     }
@@ -109,3 +108,4 @@ public class FournitureController {
         alert.showAndWait();
     }
 }
+

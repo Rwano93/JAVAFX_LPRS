@@ -94,5 +94,30 @@ public class EtudiantDAO {
         }
         return false;
     }
+    public Etudiant getById(int id) {
+        String query = "SELECT * FROM etudiants WHERE id = ?";
+        try (Connection conn = ConnexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Etudiant(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getString("mot_de_passe"),
+                        rs.getString("dernier_diplome"),
+                        rs.getString("telephone"),
+                        rs.getString("adresse")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
 

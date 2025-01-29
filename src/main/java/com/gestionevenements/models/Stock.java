@@ -33,9 +33,8 @@ public class Stock {
     // Property getters
     public IntegerProperty idProperty() { return id; }
     public StringProperty nomProduitProperty() { return nomProduit; }
-    public IntegerProperty quantiteProperty() {
-        return quantite;
-    }
+    public IntegerProperty quantiteProperty() { return quantite; }
+    public StringProperty emplacementProperty() { return emplacement; }
 }
 
 

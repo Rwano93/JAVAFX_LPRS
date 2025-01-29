@@ -7,7 +7,7 @@ import java.util.List;
 
 public class EtudiantService {
 
-    private EtudiantDAO etudiantDAO;
+    private final EtudiantDAO etudiantDAO;
 
     public EtudiantService() {
         this.etudiantDAO = new EtudiantDAO();
@@ -21,6 +21,16 @@ public class EtudiantService {
         return etudiantDAO.supprimer(id);
     }
 
-    // Autres méthodes pour ajouter, modifier, etc.
+    public boolean ajouterEtudiant(Etudiant etudiant) {
+        return etudiantDAO.ajouter(etudiant) != -1;
+    }
+
+    public Etudiant getEtudiantById(int id) {
+        return etudiantDAO.getById(id);
+    }
+
+    public boolean modifierEtudiant(Etudiant selectedEtudiant) {
+        return etudiantDAO.modifier(selectedEtudiant);
+    }
 }
 

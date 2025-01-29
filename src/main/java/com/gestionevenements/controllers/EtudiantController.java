@@ -29,7 +29,7 @@ public class EtudiantController {
     @FXML
     private TextField dernierDiplomeField;
 
-    private EtudiantService etudiantService;
+    private final EtudiantService etudiantService;
 
     public EtudiantController() {
         this.etudiantService = new EtudiantService();

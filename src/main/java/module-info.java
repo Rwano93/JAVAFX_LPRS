@@ -7,8 +7,17 @@ module com.example.javafx_lprs {
 
     opens com to javafx.fxml;
     exports com;
-    exports com;
-    opens com to javafx.fxml;
+
+    opens com.gestionevenements.utils to javafx.fxml;
+    exports com.gestionevenements.utils;
+
+    opens com.gestionevenements.controllers to javafx.fxml;
+    exports com.gestionevenements.controllers;
+
+    opens com.gestionevenements.models to javafx.fxml;
+    exports com.gestionevenements.models;
     exports com.gestionevenements;
     opens com.gestionevenements to javafx.fxml;
+
+
 }

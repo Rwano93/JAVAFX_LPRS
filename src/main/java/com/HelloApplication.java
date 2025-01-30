@@ -10,10 +10,10 @@ import java.util.Objects;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/gestionevenements/view/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("global.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/gestionevenements/styles/global.css")).toExternalForm());
 
         stage.setTitle("Gestion d'Événements");
         stage.setScene(scene);

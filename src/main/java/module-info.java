@@ -1,4 +1,4 @@
-module com.example.javafx_lprs {
+module com.javafx_lprs {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -8,14 +8,10 @@ module com.example.javafx_lprs {
     opens com to javafx.fxml;
     exports com;
 
-    opens com.gestionevenements.utils to javafx.fxml;
-    exports com.gestionevenements.utils;
-
     opens com.gestionevenements.controllers to javafx.fxml;
     exports com.gestionevenements.controllers;
 
-    opens com.gestionevenements.models to javafx.fxml;
-    exports com.gestionevenements.models;
+
 
 
 }

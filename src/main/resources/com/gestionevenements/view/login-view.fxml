@@ -2,18 +2,35 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.LoginController"
-            prefHeight="400.0" prefWidth="600.0">
-    <children>
-        <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-              AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-            <Label text="Gestion d'Événements" style="-fx-font-size: 24px;"/>
-            <TextField fx:id="emailField" promptText="Email" maxWidth="300"/>
-            <PasswordField fx:id="passwordField" promptText="Mot de passe" maxWidth="300"/>
-            <Button text="Connexion" onAction="#handleLogin" maxWidth="300"/>
-        </VBox>
-    </children>
-</AnchorPane>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.LoginController">
+    <VBox alignment="CENTER" spacing="20" maxWidth="400">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
 
+        <Label text="Gestion d'Événements" style="-fx-font-size: 24px;"/>
+
+        <TabPane>
+            <Tab text="Connexion">
+                <VBox spacing="10">
+                    <TextField fx:id="emailFieldLogin" promptText="Email"/>
+                    <PasswordField fx:id="passwordFieldLogin" promptText="Mot de passe"/>
+                    <Button text="Se connecter" onAction="#handleLogin" maxWidth="Infinity"/>
+                </VBox>
+            </Tab>
+            <Tab text="Inscription">
+                <VBox spacing="10">
+                    <TextField fx:id="nomFieldRegister" promptText="Nom"/>
+                    <TextField fx:id="prenomFieldRegister" promptText="Prénom"/>
+                    <TextField fx:id="emailFieldRegister" promptText="Email"/>
+                    <PasswordField fx:id="passwordFieldRegister" promptText="Mot de passe"/>
+                    <ComboBox fx:id="roleComboBox" promptText="Rôle"/>
+                    <Button text="S'inscrire" onAction="#handleRegister" maxWidth="Infinity"/>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </VBox>
+</StackPane>
 

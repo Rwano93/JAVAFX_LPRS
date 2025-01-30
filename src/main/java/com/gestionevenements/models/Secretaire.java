@@ -7,7 +7,7 @@ public class Secretaire extends Utilisateur {
     private final StringProperty bureau = new SimpleStringProperty(this, "bureau");
 
     public Secretaire(int id, String nom, String prenom, String email, String motDePasse, String bureau) {
-        super(id, nom, prenom, email, motDePasse);
+        super(id, nom, nom, prenom, email, motDePasse);
         this.bureau.set(bureau);
     }
 

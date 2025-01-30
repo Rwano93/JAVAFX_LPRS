@@ -23,7 +23,17 @@ public class AuthenticationService {
     }
 
     public String getUserRole(String email) {
-        return utilisateurDAO.getRoleUtilisateur(email);
+        Utilisateur utilisateur = utilisateurDAO.trouverParEmail(email);
+        return utilisateur != null ? utilisateur.getRole() : null;
+    }
+
+    public boolean register(String nom, String prenom, String email, String motDePasse, String role) {
+        if (utilisateurDAO.trouverParEmail(email) != null) {
+            return false; // L'utilisateur existe déjà
+        }
+        String motDePasseHash = passwordHasher.hasherMotDePasse(motDePasse);
+        Utilisateur nouvelUtilisateur = new Utilisateur(0, nom, prenom, email, motDePasseHash, role);
+        return utilisateurDAO.ajouter(nouvelUtilisateur);
     }
 }
 

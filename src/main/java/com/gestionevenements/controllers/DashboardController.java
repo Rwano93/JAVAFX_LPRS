@@ -2,24 +2,136 @@ package com.gestionevenements.controllers;
 
 import com.gestionevenements.utils.SessionManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class DashboardController {
 
-    @FXML
-    private Label userInfoLabel;
+    @FXML private Label userInfoLabel;
+    @FXML private Menu gestionMenu;
+    @FXML private ToggleGroup menuToggleGroup;
+    @FXML private GridPane summaryGrid;
+    @FXML private ListView<String> recentActivitiesList;
+    @FXML private FlowPane quickActionsPane;
 
-    @FXML
+    private String userRole;
+
     public void initialize() {
         String userEmail = SessionManager.getInstance().getLoggedInUser();
-        String userRole = SessionManager.getInstance().getUserRole();
+        userRole = SessionManager.getInstance().getUserRole();
         userInfoLabel.setText("Connecté en tant que: " + userEmail + " (" + userRole + ")");
+
+        setupMenuItems();
+        setupSummary();
+        setupRecentActivities();
+        setupQuickActions();
+    }
+
+    private void setupMenuItems() {
+        List<MenuItem> menuItems = getMenuItemsForRole(userRole);
+        for (MenuItem item : menuItems) {
+            gestionMenu.getItems().add(item);
+        }
+    }
+
+    private List<MenuItem> getMenuItemsForRole(String role) {
+        switch (role) {
+            case "ETUDIANT":
+                return Arrays.asList(
+                        createMenuItem("Voir les rendez-vous", this::showRendezVousView)
+                );
+            case "PROFESSEUR":
+                return Arrays.asList(
+                        createMenuItem("Gérer les rendez-vous", this::showRendezVousView)
+                );
+            case "SECRETAIRE":
+                return Arrays.asList(
+                        createMenuItem("Gérer les étudiants", this::showEtudiantsView),
+                        createMenuItem("Gérer les rendez-vous", this::showRendezVousView)
+                );
+            case "GESTIONNAIRE_STOCK":
+                return Arrays.asList(
+                        createMenuItem("Gérer les fournitures", this::showFournituresView),
+                        createMenuItem("Gérer les stocks", this::showStocksView)
+                );
+            default:
+                return Arrays.asList();
+        }
+    }
+
+    private MenuItem createMenuItem(String text, Runnable action) {
+        MenuItem item = new MenuItem(text);
+        item.setOnAction(e -> action.run());
+        return item;
+    }
+
+    private void setupSummary() {
+        // These would typically come from your services
+        addSummaryItem("Total étudiants", "150");
+        addSummaryItem("Rendez-vous aujourd'hui", "10");
+        addSummaryItem("Fournitures en stock", "500");
+    }
+
+    private void addSummaryItem(String label, String value) {
+        int rowIndex = summaryGrid.getRowCount();
+        summaryGrid.add(new Label(label + ":"), 0, rowIndex);
+        summaryGrid.add(new Label(value), 1, rowIndex);
+    }
+
+    private void setupRecentActivities() {
+        ObservableList<String> activities = FXCollections.observableArrayList(
+                "Nouvel étudiant inscrit: Jean Dupont",
+                "Rendez-vous ajouté: Prof. Martin - 15:00",
+                "Stock mis à jour: +50 stylos"
+        );
+        recentActivitiesList.setItems(activities);
+    }
+
+    private void setupQuickActions() {
+        List<Button> actions = getQuickActionsForRole(userRole);
+        quickActionsPane.getChildren().addAll(actions);
+    }
+
+    private List<Button> getQuickActionsForRole(String role) {
+        switch (role) {
+            case "ETUDIANT":
+                return Arrays.asList(
+                        createActionButton("Voir mes rendez-vous", this::showRendezVousView)
+                );
+            case "PROFESSEUR":
+                return Arrays.asList(
+                        createActionButton("Ajouter un rendez-vous", this::showRendezVousView)
+                );
+            case "SECRETAIRE":
+                return Arrays.asList(
+                        createActionButton("Ajouter un étudiant", this::showEtudiantsView),
+                        createActionButton("Planifier un rendez-vous", this::showRendezVousView)
+                );
+            case "GESTIONNAIRE_STOCK":
+                return Arrays.asList(
+                        createActionButton("Ajouter une fourniture", this::showFournituresView),
+                        createActionButton("Mettre à jour le stock", this::showStocksView)
+                );
+            default:
+                return Arrays.asList();
+        }
+    }
+
+    private Button createActionButton(String text, Runnable action) {
+        Button button = new Button(text);
+        button.setOnAction(e -> action.run());
+        return button;
     }
 
     @FXML
@@ -28,34 +140,20 @@ public class DashboardController {
         navigateToLogin();
     }
 
-    @FXML
     private void showEtudiantsView() {
         navigateTo("etudiant-view.fxml");
     }
 
-    @FXML
     private void showRendezVousView() {
         navigateTo("rendez-vous-view.fxml");
     }
 
-    @FXML
     private void showFournituresView() {
         navigateTo("fourniture-view.fxml");
     }
 
-    @FXML
-    private void showFournisseursView() {
-        navigateTo("fournisseur-view.fxml");
-    }
-
-    @FXML
     private void showStocksView() {
         navigateTo("stock-view.fxml");
-    }
-
-    @FXML
-    private void showReportsView() {
-        // TODO: Implémenter la vue des rapports
     }
 
     private void navigateToLogin() {
@@ -66,12 +164,27 @@ public class DashboardController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/gestionevenements/" + fxmlFile));
             Stage stage = (Stage) userInfoLabel.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/styles/global.css").toExternalForm());
+            stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Afficher une alerte d'erreur
+            showAlert(Alert.AlertType.ERROR, "Erreur de navigation", "Impossible de charger la page demandée.");
         }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    public void initializeWithRole(String role) {
+        userRole = role;
+        initialize();
     }
 }
 

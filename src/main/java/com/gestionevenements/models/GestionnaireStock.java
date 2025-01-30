@@ -7,7 +7,7 @@ public class GestionnaireStock extends Utilisateur {
     private final StringProperty departement = new SimpleStringProperty(this, "departement");
 
     public GestionnaireStock(int id, String nom, String prenom, String email, String motDePasse, String departement) {
-        super(id, nom, prenom, email, motDePasse);
+        super(id, nom, nom, prenom, email, motDePasse);
         this.departement.set(departement);
     }
 

@@ -6,40 +6,59 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.DashboardController">
     <top>
-        <MenuBar>
-            <Menu text="Fichier">
-                <MenuItem text="Déconnexion" onAction="#handleLogout"/>
-            </Menu>
-            <Menu text="Gestion">
-                <MenuItem text="Étudiants" onAction="#showEtudiantsView"/>
-                <MenuItem text="Rendez-vous" onAction="#showRendezVousView"/>
-                <MenuItem text="Fournitures" onAction="#showFournituresView"/>
-            </Menu>
-        </MenuBar>
+        <VBox>
+            <MenuBar>
+                <Menu text="Fichier">
+                    <MenuItem text="Déconnexion" onAction="#handleLogout"/>
+                </Menu>
+                <Menu text="Gestion">
+                    <fx:define>
+                        <ToggleGroup fx:id="menuToggleGroup"/>
+                    </fx:define>
+                </Menu>
+            </MenuBar>
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <padding>
+                    <Insets top="10" right="20" bottom="10" left="20"/>
+                </padding>
+                <Label fx:id="userInfoLabel" text="Connecté en tant que: "/>
+            </HBox>
+        </VBox>
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="20">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
-            <Label text="Tableau de bord" styleClass="title-label"/>
-            <GridPane hgap="10" vgap="10" alignment="CENTER">
-                <Button text="Gestion des étudiants" onAction="#showEtudiantsView" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <Button text="Gestion des rendez-vous" onAction="#showRendezVousView" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                <Button text="Gestion des fournitures" onAction="#showFournituresView" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <Button text="Rapports" onAction="#showReportsView" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-            </GridPane>
-        </VBox>
-    </center>
+        <ScrollPane fitToWidth="true">
+            <VBox alignment="TOP_CENTER" spacing="20">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Label text="Tableau de bord" styleClass="title-label"/>
 
-    <bottom>
-        <HBox alignment="CENTER_RIGHT" spacing="10">
-            <padding>
-                <Insets top="10" right="20" bottom="10" left="20"/>
-            </padding>
-            <Label fx:id="userInfoLabel" text="Connecté en tant que: "/>
-        </HBox>
-    </bottom>
+                <GridPane hgap="20" vgap="20" alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="200" prefWidth="300" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="200" prefWidth="300" />
+                    </columnConstraints>
+
+                    <VBox styleClass="dashboard-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Résumé" styleClass="card-title"/>
+                        <GridPane fx:id="summaryGrid" vgap="5" hgap="10">
+                            <!-- Summary information will be added dynamically -->
+                        </GridPane>
+                    </VBox>
+
+                    <VBox styleClass="dashboard-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Activités récentes" styleClass="card-title"/>
+                        <ListView fx:id="recentActivitiesList" prefHeight="200"/>
+                    </VBox>
+
+                    <VBox styleClass="dashboard-card" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                        <Label text="Actions rapides" styleClass="card-title"/>
+                        <FlowPane fx:id="quickActionsPane" hgap="10" vgap="10"/>
+                    </VBox>
+                </GridPane>
+            </VBox>
+        </ScrollPane>
+    </center>
 </BorderPane>
 

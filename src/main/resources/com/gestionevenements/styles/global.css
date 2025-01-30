@@ -72,3 +72,215 @@
     -fx-background-color: #45a049;
 }
 
+/* New styles for the dashboard */
+
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.dashboard-card {
+    -fx-background-color: white;
+    -fx-padding: 15px;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.menu-item {
+    -fx-padding: 5px 10px;
+}
+
+.menu-item:hover {
+    -fx-background-color: #4caf50;
+}
+
+#quickActionsPane .button {
+    -fx-min-width: 150px;
+}
+
+#recentActivitiesList {
+    -fx-background-color: transparent;
+}
+
+#recentActivitiesList .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5px 0;
+}
+
+#recentActivitiesList .list-cell:filled:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Additional styles for better overall appearance */
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.grid-pane {
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.separator {
+    -fx-background-color: #ddd;
+}
+
+.tooltip {
+    -fx-background-color: #333;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+
+/* Styles for form layouts */
+.form-container {
+    -fx-spacing: 10;
+    -fx-padding: 20;
+}
+
+.form-field {
+    -fx-pref-width: 200;
+}
+
+.form-label {
+    -fx-font-weight: bold;
+}
+
+/* Styles for list views */
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+}
+
+.list-cell:even {
+    -fx-background-color: #f8f8f8;
+}
+
+.list-cell:odd {
+    -fx-background-color: white;
+}
+
+.list-cell:filled:selected,
+.list-cell:filled:selected:hover {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+}
+
+/* Styles for combo boxes */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #4caf50;
+}
+
+.combo-box .arrow-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #333;
+}
+
+/* Styles for date pickers */
+.date-picker {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #4caf50;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Styles for tabs */
+.tab-pane {
+    -fx-tab-min-height: 30px;
+}
+
+.tab {
+    -fx-background-color: #f0f0f0;
+}
+
+.tab:selected {
+    -fx-background-color: white;
+}
+
+.tab-label {
+    -fx-text-fill: #333;
+}
+
+/* Styles for progress bars */
+.progress-bar {
+    -fx-accent: #4caf50;
+}
+
+.progress-bar .track {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Styles for radio buttons and checkboxes */
+.radio-button,
+.check-box {
+    -fx-text-fill: #333;
+}
+
+.radio-button:selected .radio,
+.check-box:selected .box {
+    -fx-background-color: #4caf50;
+}
+
+/* Styles for sliders */
+.slider .track {
+    -fx-background-color: #ddd;
+}
+
+.slider .thumb {
+    -fx-background-color: #4caf50;
+}
+
+/* Styles for scroll bars */
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #4caf50;
+    -fx-background-radius: 5em;
+}
+
+.scroll-bar:vertical .track,
+.scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+}
+
+/* Styles for split panes */
+.split-pane {
+    -fx-background-color: transparent;
+}
+
+.split-pane:horizontal > .split-pane-divider,
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: #ddd;
+}
+

@@ -54,7 +54,7 @@ public class LoginController {
     public void navigateToDashboard(String role) {
         try {
             String fxmlFile = "dashboard-view.fxml";
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/gestionevenements/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/gestionevenements/view/" + fxmlFile));
             Parent root = loader.load();
 
             // Get the controller and initialize it with the user's role

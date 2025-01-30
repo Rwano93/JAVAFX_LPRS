@@ -13,8 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class DashboardController {
 
@@ -27,12 +26,18 @@ public class DashboardController {
 
     private String userRole;
 
+    public DashboardController(Menu gestionMenu) {
+        this.gestionMenu = gestionMenu;
+    }
+
     public void initialize() {
         String userEmail = SessionManager.getInstance().getLoggedInUser();
         userRole = SessionManager.getInstance().getUserRole();
         userInfoLabel.setText("Connecté en tant que: " + userEmail + " (" + userRole + ")");
 
-        setupMenuItems();
+        if (gestionMenu != null) {
+            setupMenuItems();
+        }
         setupSummary();
         setupRecentActivities();
         setupQuickActions();
@@ -40,34 +45,27 @@ public class DashboardController {
 
     private void setupMenuItems() {
         List<MenuItem> menuItems = getMenuItemsForRole(userRole);
-        for (MenuItem item : menuItems) {
-            gestionMenu.getItems().add(item);
+        if (gestionMenu != null) {
+            gestionMenu.getItems().setAll(menuItems);
         }
     }
 
     private List<MenuItem> getMenuItemsForRole(String role) {
-        switch (role) {
-            case "ETUDIANT":
-                return Arrays.asList(
-                        createMenuItem("Voir les rendez-vous", this::showRendezVousView)
-                );
-            case "PROFESSEUR":
-                return Arrays.asList(
-                        createMenuItem("Gérer les rendez-vous", this::showRendezVousView)
-                );
-            case "SECRETAIRE":
-                return Arrays.asList(
-                        createMenuItem("Gérer les étudiants", this::showEtudiantsView),
-                        createMenuItem("Gérer les rendez-vous", this::showRendezVousView)
-                );
-            case "GESTIONNAIRE_STOCK":
-                return Arrays.asList(
-                        createMenuItem("Gérer les fournitures", this::showFournituresView),
-                        createMenuItem("Gérer les stocks", this::showStocksView)
-                );
-            default:
-                return Arrays.asList();
-        }
+        return switch (role) {
+            case "ETUDIANT" ->
+                    Collections.singletonList(createMenuItem("Voir les rendez-vous", this::showRendezVousView));
+            case "PROFESSEUR" ->
+                    Collections.singletonList(createMenuItem("Gérer les rendez-vous", this::showRendezVousView));
+            case "SECRETAIRE" -> Arrays.asList(
+                    createMenuItem("Gérer les étudiants", this::showEtudiantsView),
+                    createMenuItem("Gérer les rendez-vous", this::showRendezVousView)
+            );
+            case "GESTIONNAIRE_STOCK" -> Arrays.asList(
+                    createMenuItem("Gérer les fournitures", this::showFournituresView),
+                    createMenuItem("Gérer les stocks", this::showStocksView)
+            );
+            default -> Collections.emptyList();
+        };
     }
 
     private MenuItem createMenuItem(String text, Runnable action) {
@@ -77,14 +75,13 @@ public class DashboardController {
     }
 
     private void setupSummary() {
-        // These would typically come from your services
         addSummaryItem("Total étudiants", "150");
         addSummaryItem("Rendez-vous aujourd'hui", "10");
         addSummaryItem("Fournitures en stock", "500");
     }
 
     private void addSummaryItem(String label, String value) {
-        int rowIndex = summaryGrid.getRowCount();
+        int rowIndex = summaryGrid.getChildren().size() / 2;
         summaryGrid.add(new Label(label + ":"), 0, rowIndex);
         summaryGrid.add(new Label(value), 1, rowIndex);
     }
@@ -100,32 +97,25 @@ public class DashboardController {
 
     private void setupQuickActions() {
         List<Button> actions = getQuickActionsForRole(userRole);
-        quickActionsPane.getChildren().addAll(actions);
+        quickActionsPane.getChildren().setAll(actions);
     }
 
     private List<Button> getQuickActionsForRole(String role) {
-        switch (role) {
-            case "ETUDIANT":
-                return Arrays.asList(
-                        createActionButton("Voir mes rendez-vous", this::showRendezVousView)
-                );
-            case "PROFESSEUR":
-                return Arrays.asList(
-                        createActionButton("Ajouter un rendez-vous", this::showRendezVousView)
-                );
-            case "SECRETAIRE":
-                return Arrays.asList(
-                        createActionButton("Ajouter un étudiant", this::showEtudiantsView),
-                        createActionButton("Planifier un rendez-vous", this::showRendezVousView)
-                );
-            case "GESTIONNAIRE_STOCK":
-                return Arrays.asList(
-                        createActionButton("Ajouter une fourniture", this::showFournituresView),
-                        createActionButton("Mettre à jour le stock", this::showStocksView)
-                );
-            default:
-                return Arrays.asList();
-        }
+        return switch (role) {
+            case "ETUDIANT" ->
+                    Collections.singletonList(createActionButton("Voir mes rendez-vous", this::showRendezVousView));
+            case "PROFESSEUR" ->
+                    Collections.singletonList(createActionButton("Ajouter un rendez-vous", this::showRendezVousView));
+            case "SECRETAIRE" -> Arrays.asList(
+                    createActionButton("Ajouter un étudiant", this::showEtudiantsView),
+                    createActionButton("Planifier un rendez-vous", this::showRendezVousView)
+            );
+            case "GESTIONNAIRE_STOCK" -> Arrays.asList(
+                    createActionButton("Ajouter une fourniture", this::showFournituresView),
+                    createActionButton("Mettre à jour le stock", this::showStocksView)
+            );
+            default -> Collections.emptyList();
+        };
     }
 
     private Button createActionButton(String text, Runnable action) {
@@ -162,10 +152,20 @@ public class DashboardController {
 
     private void navigateTo(String fxmlFile) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/gestionevenements/" + fxmlFile));
+            String resourcePath = "/com/gestionevenements/" + fxmlFile;
+            if (getClass().getResource(resourcePath) == null) {
+                throw new IOException("Fichier FXML introuvable: " + resourcePath);
+            }
+
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(resourcePath)));
             Stage stage = (Stage) userInfoLabel.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/styles/global.css").toExternalForm());
+
+            String cssPath = "/styles/global.css";
+            if (getClass().getResource(cssPath) != null) {
+                scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+            }
+
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -186,5 +186,12 @@ public class DashboardController {
         userRole = role;
         initialize();
     }
-}
 
+    public ToggleGroup getMenuToggleGroup() {
+        return menuToggleGroup;
+    }
+
+    public void setMenuToggleGroup(ToggleGroup menuToggleGroup) {
+        this.menuToggleGroup = menuToggleGroup;
+    }
+}

@@ -1,9 +1,12 @@
 package com.gestionevenements.database;
 
 import com.gestionevenements.models.RendezVous;
+import com.gestionevenements.models.Salle;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RendezVousDAO {
 
@@ -36,6 +39,93 @@ public class RendezVousDAO {
         return -1;
     }
 
+    public boolean supprimer(int id) {
+        String query = "DELETE FROM rendez_vous WHERE id = ?";
+        try (Connection conn = ConnexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<RendezVous> getTout() {
+        List<RendezVous> rendezVousList = new ArrayList<>();
+        String query = "SELECT r.*, s.nom as salle_nom, s.capacite as salle_capacite FROM rendez_vous r JOIN salles s ON r.salle_id = s.id";
+        try (Connection conn = ConnexionBD.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                Salle salle = new Salle(rs.getInt("salle_id"), rs.getString("salle_nom"), rs.getInt("salle_capacite"));
+                RendezVous rendezVous = new RendezVous(
+                        rs.getInt("id"),
+                        rs.getString("etudiant"),
+                        rs.getString("professeur"),
+                        rs.getDate("date").toLocalDate(),
+                        rs.getTime("heure").toLocalTime(),
+                        salle
+                );
+                rendezVousList.add(rendezVous);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rendezVousList;
+    }
+
+    public List<RendezVous> getByEtudiant(String email) {
+        List<RendezVous> rendezVousList = new ArrayList<>();
+        String query = "SELECT r.*, s.nom as salle_nom, s.capacite as salle_capacite FROM rendez_vous r JOIN salles s ON r.salle_id = s.id WHERE r.etudiant = ?";
+        try (Connection conn = ConnexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Salle salle = new Salle(rs.getInt("salle_id"), rs.getString("salle_nom"), rs.getInt("salle_capacite"));
+                RendezVous rendezVous = new RendezVous(
+                        rs.getInt("id"),
+                        rs.getString("etudiant"),
+                        rs.getString("professeur"),
+                        rs.getDate("date").toLocalDate(),
+                        rs.getTime("heure").toLocalTime(),
+                        salle
+                );
+                rendezVousList.add(rendezVous);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rendezVousList;
+    }
+
+    public List<RendezVous> getByProfesseur(String email) {
+        List<RendezVous> rendezVousList = new ArrayList<>();
+        String query = "SELECT r.*, s.nom as salle_nom, s.capacite as salle_capacite FROM rendez_vous r JOIN salles s ON r.salle_id = s.id WHERE r.professeur = ?";
+        try (Connection conn = ConnexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Salle salle = new Salle(rs.getInt("salle_id"), rs.getString("salle_nom"), rs.getInt("salle_capacite"));
+                RendezVous rendezVous = new RendezVous(
+                        rs.getInt("id"),
+                        rs.getString("etudiant"),
+                        rs.getString("professeur"),
+                        rs.getDate("date").toLocalDate(),
+                        rs.getTime("heure").toLocalTime(),
+                        salle
+                );
+                rendezVousList.add(rendezVous);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rendezVousList;
+    }
+
     public boolean getSalleDisponible(int salleId, LocalDate date, LocalTime heure) {
         String query = "SELECT COUNT(*) FROM rendez_vous WHERE salle_id = ? AND date = ? AND heure = ?";
         try (Connection conn = ConnexionBD.getConnection();
@@ -53,5 +143,34 @@ public class RendezVousDAO {
         }
         return false;
     }
-}
 
+    public List<String> getAllEtudiants() {
+        List<String> etudiants = new ArrayList<>();
+        String query = "SELECT DISTINCT etudiant FROM rendez_vous";
+        try (Connection conn = ConnexionBD.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                etudiants.add(rs.getString("etudiant"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return etudiants;
+    }
+
+    public List<String> getAllProfesseurs() {
+        List<String> professeurs = new ArrayList<>();
+        String query = "SELECT DISTINCT professeur FROM rendez_vous";
+        try (Connection conn = ConnexionBD.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                professeurs.add(rs.getString("professeur"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return professeurs;
+    }
+}

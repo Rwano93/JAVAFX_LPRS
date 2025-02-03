@@ -20,25 +20,34 @@ public class RendezVousService {
     }
 
     public boolean prendreRendezVous(RendezVous rendezVous) {
-        // Vérifier si la salle est disponible
         if (!isSalleDisponible(rendezVous.getSalle(), rendezVous.getDate(), rendezVous.getHeure())) {
             return false;
         }
-
-        // Enregistrer le rendez-vous
         return rendezVousDAO.ajouter(rendezVous) != -1;
     }
 
+    public boolean supprimerRendezVous(int id) {
+        return rendezVousDAO.supprimer(id);
+    }
+
+    public List<RendezVous> getAllRendezVous() {
+        return rendezVousDAO.getTout();
+    }
+
+    public List<RendezVous> getRendezVousByEtudiant(String email) {
+        return rendezVousDAO.getByEtudiant(email);
+    }
+
+    public List<RendezVous> getRendezVousByProfesseur(String email) {
+        return rendezVousDAO.getByProfesseur(email);
+    }
+
     public List<String> getAllEtudiants() {
-        // Cette méthode devrait retourner la liste de tous les étudiants
-        // Pour simplifier, nous retournons une liste vide
-        return List.of();
+        return rendezVousDAO.getAllEtudiants();
     }
 
     public List<String> getAllProfesseurs() {
-        // Cette méthode devrait retourner la liste de tous les professeurs
-        // Pour simplifier, nous retournons une liste vide
-        return List.of();
+        return rendezVousDAO.getAllProfesseurs();
     }
 
     public List<Salle> getAllSalles() {
@@ -55,4 +64,3 @@ public class RendezVousService {
         return rendezVousDAO.getSalleDisponible(salle.getId(), date, heure);
     }
 }
-

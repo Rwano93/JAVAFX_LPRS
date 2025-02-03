@@ -10,15 +10,16 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <Label text="Prise de rendez-vous" styleClass="title-label"/>
+    <Label text="Gestion des rendez-vous" styleClass="title-label"/>
 
-    <ComboBox fx:id="etudiantComboBox" promptText="Sélectionner un étudiant" styleClass="form-field"/>
-    <ComboBox fx:id="professeurComboBox" promptText="Sélectionner un professeur" styleClass="form-field"/>
-    <DatePicker fx:id="datePicker" promptText="Sélectionner une date" styleClass="form-field"/>
-    <ComboBox fx:id="heureComboBox" promptText="Sélectionner une heure" styleClass="form-field"/>
-    <ComboBox fx:id="salleComboBox" promptText="Sélectionner une salle" styleClass="form-field"/>
-
-    <Button text="Prendre rendez-vous" onAction="#handlePrendreRendezVous" styleClass="submit-button"/>
+    <HBox spacing="10" alignment="CENTER">
+        <ComboBox fx:id="etudiantComboBox" promptText="Sélectionner un étudiant"/>
+        <ComboBox fx:id="professeurComboBox" promptText="Sélectionner un professeur"/>
+        <DatePicker fx:id="datePicker" promptText="Sélectionner une date"/>
+        <ComboBox fx:id="heureComboBox" promptText="Sélectionner une heure"/>
+        <ComboBox fx:id="salleComboBox" promptText="Sélectionner une salle"/>
+        <Button fx:id="ajouterButton" text="Ajouter" onAction="#handleAjouterRendezVous"/>
+    </HBox>
 
     <TableView fx:id="rendezVousTableView" VBox.vgrow="ALWAYS">
         <columns>
@@ -29,5 +30,9 @@
             <TableColumn text="Salle" fx:id="salleColumn"/>
         </columns>
     </TableView>
-</VBox>
 
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="modifierButton" text="Modifier" onAction="#handleModifierRendezVous"/>
+        <Button fx:id="supprimerButton" text="Supprimer" onAction="#handleSupprimerRendezVous"/>
+    </HBox>
+</VBox>

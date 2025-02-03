@@ -120,5 +120,28 @@ public class DossierInscriptionDAO {
         }
         return null;
     }
+
+    public DossierInscription getByEtudiantId(int etudiantId) {
+        String query = "SELECT * FROM dossiers_inscription WHERE etudiant_id = ?";
+        try (Connection conn = ConnexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, etudiantId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Etudiant etudiant = etudiantDAO.getById(etudiantId);
+                return new DossierInscription(
+                        rs.getInt("id"),
+                        etudiant,
+                        rs.getTimestamp("date_heure").toLocalDateTime(),
+                        rs.getString("filiere_interet"),
+                        rs.getString("motivations"),
+                        rs.getString("statut")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 

@@ -10,18 +10,23 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <Label text="Inscription" styleClass="title-label"/>
+    <Label text="Gestion des dossiers d'inscription" styleClass="title-label"/>
 
-    <TextField fx:id="nomField" promptText="Nom" styleClass="form-field"/>
-    <TextField fx:id="prenomField" promptText="Prénom" styleClass="form-field"/>
-    <TextField fx:id="emailField" promptText="Email" styleClass="form-field"/>
-    <TextField fx:id="telephoneField" promptText="Téléphone" styleClass="form-field"/>
-    <TextField fx:id="adresseField" promptText="Adresse" styleClass="form-field"/>
-    <TextField fx:id="dernierDiplomeField" promptText="Dernier diplôme" styleClass="form-field"/>
-    <TextField fx:id="filiereInteretField" promptText="Filière d'intérêt" styleClass="form-field"/>
-    <DatePicker fx:id="dateInscriptionPicker" promptText="Date d'inscription" styleClass="form-field"/>
-    <TextArea fx:id="motivationsArea" promptText="Motivations" styleClass="form-field" wrapText="true"/>
+    <TableView fx:id="inscriptionTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="Nom" fx:id="nomColumn"/>
+            <TableColumn text="Prénom" fx:id="prenomColumn"/>
+            <TableColumn text="Date d'inscription" fx:id="dateInscriptionColumn"/>
+            <TableColumn text="Filière" fx:id="filiereColumn"/>
+            <TableColumn text="Statut" fx:id="statutColumn"/>
+        </columns>
+    </TableView>
 
-    <Button text="S'inscrire" onAction="#handleInscription" styleClass="submit-button"/>
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Ajouter" onAction="#handleAjouterInscription"/>
+        <Button text="Modifier" onAction="#handleModifierInscription"/>
+        <Button text="Supprimer" onAction="#handleSupprimerInscription"/>
+        <Button text="Voir détails" onAction="#handleVoirDetailsInscription"/>
+    </HBox>
 </VBox>
 

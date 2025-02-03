@@ -64,5 +64,13 @@ public class InscriptionService {
     public DossierInscription getDossierInscriptionById(int id) {
         return dossierInscriptionDAO.getById(id);
     }
+
+    public DossierInscription getDossierInscriptionByEmail(String email) {
+        Etudiant etudiant = etudiantDAO.trouverParEmail(email);
+        if (etudiant != null) {
+            return dossierInscriptionDAO.getByEtudiantId(etudiant.getId());
+        }
+        return null;
+    }
 }
 

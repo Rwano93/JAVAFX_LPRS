@@ -1,5 +1,7 @@
 package com.gestionevenements.controllers;
 
+import com.gestionevenements.models.DossierInscription;
+import com.gestionevenements.services.InscriptionService;
 import com.gestionevenements.utils.SessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,19 +19,25 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class DashboardController implements Initializable{
+public class DashboardController implements Initializable {
 
     @FXML private Label userInfoLabel;
     @FXML private Menu gestionMenu;
-    @FXML private ToggleGroup menuToggleGroup;
     @FXML private GridPane summaryGrid;
     @FXML private ListView<String> recentActivitiesList;
     @FXML private FlowPane quickActionsPane;
+    @FXML private TableView<DossierInscription> inscriptionFilesTableView;
+    @FXML private TableColumn<DossierInscription, String> nomColumn;
+    @FXML private TableColumn<DossierInscription, String> prenomColumn;
+    @FXML private TableColumn<DossierInscription, String> dateInscriptionColumn;
+    @FXML private TableColumn<DossierInscription, String> statutColumn;
+
     private String userRole;
+    private InscriptionService inscriptionService;
 
     public DashboardController() {
+        this.inscriptionService = new InscriptionService();
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -37,34 +45,36 @@ public class DashboardController implements Initializable{
         userRole = SessionManager.getInstance().getUserRole();
         userInfoLabel.setText("Connecté en tant que: " + userEmail + " (" + userRole + ")");
 
-        if (gestionMenu != null) {
-            setupMenuItems();
-        }
+        setupMenuItems();
         setupSummary();
         setupRecentActivities();
         setupQuickActions();
+        setupInscriptionFilesTable();
     }
 
     private void setupMenuItems() {
         List<MenuItem> menuItems = getMenuItemsForRole(userRole);
-        if (gestionMenu != null) {
-            gestionMenu.getItems().setAll(menuItems);
-        }
+        gestionMenu.getItems().setAll(menuItems);
     }
 
     private List<MenuItem> getMenuItemsForRole(String role) {
         return switch (role) {
-            case "ETUDIANT" ->
-                    Collections.singletonList(createMenuItem("Voir les rendez-vous", this::showRendezVousView));
-            case "PROFESSEUR" ->
-                    Collections.singletonList(createMenuItem("Gérer les rendez-vous", this::showRendezVousView));
-            case "SECRETAIRE" -> Arrays.asList(
-                    createMenuItem("Gérer les étudiants", this::showEtudiantsView),
+            case "ETUDIANT" -> List.of(
+                    createMenuItem("Voir les rendez-vous", this::showRendezVousView),
+                    createMenuItem("Mon dossier d'inscription", this::showMyInscriptionFile)
+            );
+            case "PROFESSEUR" -> List.of(
                     createMenuItem("Gérer les rendez-vous", this::showRendezVousView)
             );
-            case "GESTIONNAIRE_STOCK" -> Arrays.asList(
+            case "SECRETAIRE" -> List.of(
+                    createMenuItem("Gérer les étudiants", this::showEtudiantsView),
+                    createMenuItem("Gérer les rendez-vous", this::showRendezVousView),
+                    createMenuItem("Gérer les inscriptions", this::showInscriptionsView)
+            );
+            case "GESTIONNAIRE_STOCK" -> List.of(
                     createMenuItem("Gérer les fournitures", this::showFournituresView),
-                    createMenuItem("Gérer les stocks", this::showStocksView)
+                    createMenuItem("Gérer les stocks", this::showStocksView),
+                    createMenuItem("Gérer les fournisseurs", this::showFournisseursView)
             );
             default -> Collections.emptyList();
         };
@@ -80,10 +90,11 @@ public class DashboardController implements Initializable{
         addSummaryItem("Total étudiants", "150");
         addSummaryItem("Rendez-vous aujourd'hui", "10");
         addSummaryItem("Fournitures en stock", "500");
+        addSummaryItem("Dossiers d'inscription en attente", "25");
     }
 
     private void addSummaryItem(String label, String value) {
-        int rowIndex = summaryGrid.getChildren().size() / 2;
+        int rowIndex = summaryGrid.getRowCount();
         summaryGrid.add(new Label(label + ":"), 0, rowIndex);
         summaryGrid.add(new Label(value), 1, rowIndex);
     }
@@ -92,7 +103,8 @@ public class DashboardController implements Initializable{
         ObservableList<String> activities = FXCollections.observableArrayList(
                 "Nouvel étudiant inscrit: Jean Dupont",
                 "Rendez-vous ajouté: Prof. Martin - 15:00",
-                "Stock mis à jour: +50 stylos"
+                "Stock mis à jour: +50 stylos",
+                "Dossier d'inscription validé: Marie Curie"
         );
         recentActivitiesList.setItems(activities);
     }
@@ -102,29 +114,25 @@ public class DashboardController implements Initializable{
         quickActionsPane.getChildren().setAll(actions);
     }
 
-    public void initializeWithRole(String role) {
-        this.userRole = role; // Stocke le rôle
-        userInfoLabel.setText("Connecté en tant que: " + SessionManager.getInstance().getLoggedInUser() + " (" + role + ")");
-
-        // Met à jour les éléments dynamiques en fonction du rôle
-        setupMenuItems();
-        setupQuickActions();
-    }
-
-
     private List<Button> getQuickActionsForRole(String role) {
         return switch (role) {
-            case "ETUDIANT" ->
-                    Collections.singletonList(createActionButton("Voir mes rendez-vous", this::showRendezVousView));
-            case "PROFESSEUR" ->
-                    Collections.singletonList(createActionButton("Ajouter un rendez-vous", this::showRendezVousView));
-            case "SECRETAIRE" -> Arrays.asList(
-                    createActionButton("Ajouter un étudiant", this::showEtudiantsView),
-                    createActionButton("Planifier un rendez-vous", this::showRendezVousView)
+            case "ETUDIANT" -> List.of(
+                    createActionButton("Voir mes rendez-vous", this::showRendezVousView),
+                    createActionButton("Consulter mon dossier", this::showMyInscriptionFile)
             );
-            case "GESTIONNAIRE_STOCK" -> Arrays.asList(
+            case "PROFESSEUR" -> List.of(
+                    createActionButton("Ajouter un rendez-vous", this::showRendezVousView),
+                    createActionButton("Voir mon emploi du temps", this::showEmploiDuTemps)
+            );
+            case "SECRETAIRE" -> List.of(
+                    createActionButton("Ajouter un étudiant", this::showEtudiantsView),
+                    createActionButton("Planifier un rendez-vous", this::showRendezVousView),
+                    createActionButton("Gérer les inscriptions", this::showInscriptionsView)
+            );
+            case "GESTIONNAIRE_STOCK" -> List.of(
                     createActionButton("Ajouter une fourniture", this::showFournituresView),
-                    createActionButton("Mettre à jour le stock", this::showStocksView)
+                    createActionButton("Mettre à jour le stock", this::showStocksView),
+                    createActionButton("Commander des fournitures", this::showCommandeFournitures)
             );
             default -> Collections.emptyList();
         };
@@ -136,6 +144,26 @@ public class DashboardController implements Initializable{
         return button;
     }
 
+    private void setupInscriptionFilesTable() {
+        nomColumn.setCellValueFactory(cellData -> cellData.getValue().getEtudiant().nomProperty());
+        prenomColumn.setCellValueFactory(cellData -> cellData.getValue().getEtudiant().prenomProperty());
+        dateInscriptionColumn.setCellValueFactory(cellData -> cellData.getValue().dateHeureProperty().asString());
+        statutColumn.setCellValueFactory(cellData -> cellData.getValue().statutProperty());
+
+        if ("ETUDIANT".equals(userRole)) {
+            // Pour les étudiants, afficher uniquement leur propre dossier
+            String userEmail = SessionManager.getInstance().getLoggedInUser();
+            DossierInscription dossier = inscriptionService.getDossierInscriptionByEmail(userEmail);
+            if (dossier != null) {
+                inscriptionFilesTableView.setItems(FXCollections.observableArrayList(dossier));
+            }
+        } else {
+            // Pour les autres rôles, afficher tous les dossiers
+            List<DossierInscription> dossiers = inscriptionService.getAllDossiersInscription();
+            inscriptionFilesTableView.setItems(FXCollections.observableArrayList(dossiers));
+        }
+    }
+
     @FXML
     private void handleLogout() {
         SessionManager.getInstance().logout();
@@ -143,41 +171,52 @@ public class DashboardController implements Initializable{
     }
 
     private void showEtudiantsView() {
-        navigateTo("etudiant-view.fxml");
+        navigateTo("/com/gestionevenements/view/etudiant-view.fxml");
     }
 
     private void showRendezVousView() {
-        navigateTo("rendez-vous-view.fxml");
+        navigateTo("/com/gestionevenements/view/rendez-vous-view.fxml");
     }
 
     private void showFournituresView() {
-        navigateTo("fourniture-view.fxml");
+        navigateTo("/com/gestionevenements/view/fourniture-view.fxml");
     }
 
     private void showStocksView() {
-        navigateTo("stock-view.fxml");
+        navigateTo("/com/gestionevenements/view/stock-view.fxml");
+    }
+
+    private void showInscriptionsView() {
+        navigateTo("/com/gestionevenements/view/inscription-view.fxml");
+    }
+
+    private void showFournisseursView() {
+        navigateTo("/com/gestionevenements/view/fournisseur-view.fxml");
+    }
+
+    private void showMyInscriptionFile() {
+
+    }
+
+    private void showEmploiDuTemps() {
+
+    }
+
+    private void showCommandeFournitures() {
+
     }
 
     private void navigateToLogin() {
-        navigateTo("login-view.fxml");
+        navigateTo("/com/gestionevenements/view/login-view.fxml");
     }
 
     private void navigateTo(String fxmlFile) {
         try {
-            String resourcePath = "/com/gestionevenements/" + fxmlFile;
-            if (getClass().getResource(resourcePath) == null) {
-                throw new IOException("Fichier FXML introuvable: " + resourcePath);
-            }
-
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(resourcePath)));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/gestionevenements/view/" + fxmlFile));
+            Parent root = loader.load();
             Stage stage = (Stage) userInfoLabel.getScene().getWindow();
             Scene scene = new Scene(root);
-
-            String cssPath = "/styles/global.css";
-            if (getClass().getResource(cssPath) != null) {
-                scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
-            }
-
+            scene.getStylesheets().add(getClass().getResource("/styles/global.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -193,12 +232,5 @@ public class DashboardController implements Initializable{
         alert.setContentText(content);
         alert.showAndWait();
     }
-
-    public ToggleGroup getMenuToggleGroup() {
-        return menuToggleGroup;
-    }
-
-    public void setMenuToggleGroup(ToggleGroup menuToggleGroup) {
-        this.menuToggleGroup = menuToggleGroup;
-    }
 }
+

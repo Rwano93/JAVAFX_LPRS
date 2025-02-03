@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
 
 public class LoginController {
@@ -53,24 +54,56 @@ public class LoginController {
 
     public void navigateToDashboard(String role) {
         try {
-            String fxmlFile = "dashboard-view.fxml";
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/gestionevenements/view/" + fxmlFile));
+            String fxmlPath = "/com/gestionevenements/view/dashboard-view.fxml";
+            URL fxmlLocation = getClass().getResource(fxmlPath);
+
+            // Vérification du chemin FXML
+            if (fxmlLocation == null) {
+                throw new IOException("Fichier FXML introuvable: " + fxmlPath);
+            }
+
+
+            FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();
 
-            // Get the controller and initialize it with the user's role
+            // Vérification du contrôleur
             DashboardController dashboardController = loader.getController();
-            dashboardController.initializeWithRole(role);
+            if (dashboardController == null) {
+                throw new NullPointerException("Le contrôleur DashboardController est NULL après chargement du FXML.");
+            }
 
+
+            // Initialisation du rôle
+            dashboardController.initializeWithRole(role);
+            System.out.println("Dashboard initialisé avec le rôle: " + role);
+
+            // Récupération de la fenêtre actuelle
             Stage stage = (Stage) emailFieldLogin.getScene().getWindow();
+
+            // Création de la nouvelle scène
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/global.css")).toExternalForm());
+
+            // Vérification et application du fichier CSS
+            String cssPath = "com/gestionevenements/styles/global.css";
+            URL cssLocation = getClass().getResource(cssPath);
+            if (cssLocation != null) {
+                scene.getStylesheets().add(cssLocation.toExternalForm());
+            }
+
+            // Affichage de la nouvelle scène
             stage.setScene(scene);
             stage.show();
+            System.out.println("Navigation vers le Dashboard réussie.");
+
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement du tableau de bord.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement du tableau de bord : " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur Inattendue", "Une erreur inattendue est survenue : " + e.getMessage());
         }
     }
+
 
     @FXML
     private void handleRegister() {

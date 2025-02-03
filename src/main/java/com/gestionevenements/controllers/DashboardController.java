@@ -2,6 +2,7 @@ package com.gestionevenements.controllers;
 
 import com.gestionevenements.utils.SessionManager;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -13,9 +14,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
-public class DashboardController {
+public class DashboardController implements Initializable{
 
     @FXML private Label userInfoLabel;
     @FXML private Menu gestionMenu;
@@ -23,14 +25,14 @@ public class DashboardController {
     @FXML private GridPane summaryGrid;
     @FXML private ListView<String> recentActivitiesList;
     @FXML private FlowPane quickActionsPane;
-
     private String userRole;
 
-    public DashboardController(Menu gestionMenu) {
-        this.gestionMenu = gestionMenu;
+    public DashboardController() {
     }
 
-    public void initialize() {
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         String userEmail = SessionManager.getInstance().getLoggedInUser();
         userRole = SessionManager.getInstance().getUserRole();
         userInfoLabel.setText("Connecté en tant que: " + userEmail + " (" + userRole + ")");
@@ -99,6 +101,16 @@ public class DashboardController {
         List<Button> actions = getQuickActionsForRole(userRole);
         quickActionsPane.getChildren().setAll(actions);
     }
+
+    public void initializeWithRole(String role) {
+        this.userRole = role; // Stocke le rôle
+        userInfoLabel.setText("Connecté en tant que: " + SessionManager.getInstance().getLoggedInUser() + " (" + role + ")");
+
+        // Met à jour les éléments dynamiques en fonction du rôle
+        setupMenuItems();
+        setupQuickActions();
+    }
+
 
     private List<Button> getQuickActionsForRole(String role) {
         return switch (role) {
@@ -180,11 +192,6 @@ public class DashboardController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    public void initializeWithRole(String role) {
-        userRole = role;
-        initialize();
     }
 
     public ToggleGroup getMenuToggleGroup() {

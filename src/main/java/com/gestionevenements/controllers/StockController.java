@@ -5,23 +5,20 @@ import com.gestionevenements.services.StockService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
+import javafx.fxml.Initializable;
 
-public class StockController {
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    @FXML
-    private TextField nomProduitField;
-    @FXML
-    private TextField quantiteField;
-    @FXML
-    private TextField emplacementField;
-    @FXML
-    private TableView<Stock> stockTableView;
-    @FXML
-    private TableColumn<Stock, String> nomProduitColumn;
-    @FXML
-    private TableColumn<Stock, Number> quantiteColumn;
-    @FXML
-    private TableColumn<Stock, String> emplacementColumn;
+public class StockController implements Initializable {
+
+    @FXML private TextField nomProduitField;
+    @FXML private TextField quantiteField;
+    @FXML private TextField emplacementField;
+    @FXML private TableView<Stock> stockTableView;
+    @FXML private TableColumn<Stock, String> nomProduitColumn;
+    @FXML private TableColumn<Stock, Number> quantiteColumn;
+    @FXML private TableColumn<Stock, String> emplacementColumn;
 
     private StockService stockService;
 
@@ -29,16 +26,19 @@ public class StockController {
         this.stockService = new StockService();
     }
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setupTableColumns();
+        loadStocks();
+    }
+
+    private void setupTableColumns() {
         nomProduitColumn.setCellValueFactory(cellData -> cellData.getValue().nomProduitProperty());
         quantiteColumn.setCellValueFactory(cellData -> cellData.getValue().quantiteProperty());
         emplacementColumn.setCellValueFactory(cellData -> cellData.getValue().emplacementProperty());
-
-        updateStockList();
     }
 
-    private void updateStockList() {
+    private void loadStocks() {
         stockTableView.setItems(FXCollections.observableArrayList(stockService.getAllStocks()));
     }
 
@@ -49,16 +49,22 @@ public class StockController {
             int quantite = Integer.parseInt(quantiteField.getText());
             String emplacement = emplacementField.getText();
 
+            if (nomProduit.isEmpty() || emplacement.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Champs incomplets", "Veuillez remplir tous les champs.");
+                return;
+            }
+
             Stock stock = new Stock(0, nomProduit, quantite, emplacement);
             boolean success = stockService.ajouterStock(stock);
             if (success) {
                 clearFields();
-                updateStockList();
+                loadStocks();
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Le stock a été ajouté avec succès.");
             } else {
-                showAlert("Erreur", "Impossible d'ajouter le stock.");
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ajouter le stock.");
             }
         } catch (NumberFormatException e) {
-            showAlert("Erreur", "La quantité doit être un nombre entier.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier.");
         }
     }
 
@@ -74,15 +80,16 @@ public class StockController {
                 boolean success = stockService.modifierStock(selectedStock);
                 if (success) {
                     clearFields();
-                    updateStockList();
+                    loadStocks();
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Le stock a été modifié avec succès.");
                 } else {
-                    showAlert("Erreur", "Impossible de modifier le stock.");
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de modifier le stock.");
                 }
             } catch (NumberFormatException e) {
-                showAlert("Erreur", "La quantité doit être un nombre entier.");
+                showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier.");
             }
         } else {
-            showAlert("Erreur", "Veuillez sélectionner un stock à modifier.");
+            showAlert(Alert.AlertType.WARNING, "Sélection requise", "Veuillez sélectionner un stock à modifier.");
         }
     }
 
@@ -90,17 +97,28 @@ public class StockController {
     private void handleSupprimerStock() {
         Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
         if (selectedStock != null) {
-            boolean confirmed = showConfirmation("Confirmation", "Êtes-vous sûr de vouloir supprimer ce stock ?");
+            boolean confirmed = showConfirmation("Confirmation de suppression", "Êtes-vous sûr de vouloir supprimer ce stock ?");
             if (confirmed) {
                 boolean success = stockService.supprimerStock(selectedStock.getId());
                 if (success) {
-                    updateStockList();
+                    loadStocks();
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Le stock a été supprimé avec succès.");
                 } else {
-                    showAlert("Erreur", "Impossible de supprimer le stock.");
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de supprimer le stock.");
                 }
             }
         } else {
-            showAlert("Erreur", "Veuillez sélectionner un stock à supprimer.");
+            showAlert(Alert.AlertType.WARNING, "Sélection requise", "Veuillez sélectionner un stock à supprimer.");
+        }
+    }
+
+    @FXML
+    private void handleSelectionStock() {
+        Stock selectedStock = stockTableView.getSelectionModel().getSelectedItem();
+        if (selectedStock != null) {
+            nomProduitField.setText(selectedStock.getNomProduit());
+            quantiteField.setText(String.valueOf(selectedStock.getQuantite()));
+            emplacementField.setText(selectedStock.getEmplacement());
         }
     }
 
@@ -110,8 +128,8 @@ public class StockController {
         emplacementField.clear();
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -126,4 +144,3 @@ public class StockController {
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
 }
-

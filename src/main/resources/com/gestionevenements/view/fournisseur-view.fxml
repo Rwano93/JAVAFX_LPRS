@@ -1,37 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.FournisseurController"
-      spacing="10" alignment="CENTER" styleClass="form-container">
+<VBox alignment="CENTER" spacing="10" styleClass="form-container" stylesheets="@../styles/global.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.gestionevenements.controllers.FournisseurController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
-    <Label text="Gestion des fournisseurs" styleClass="title-label"/>
+    <Label styleClass="title-label" text="Gestion des fournisseurs" />
 
     <GridPane hgap="10" vgap="10">
-        <TextField fx:id="nomField" promptText="Nom" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-field"/>
-        <TextField fx:id="adresseField" promptText="Adresse" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-field"/>
-        <TextField fx:id="telephoneField" promptText="Téléphone" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-field"/>
-        <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
+        <TextField fx:id="nomField" promptText="Nom" styleClass="form-field" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="adresseField" promptText="Adresse" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="telephoneField" promptText="Téléphone" styleClass="form-field" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="emailField" promptText="Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
     </GridPane>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Ajouter" onAction="#handleAjouterFournisseur" styleClass="submit-button"/>
-        <Button text="Modifier" onAction="#handleModifierFournisseur" styleClass="edit-button"/>
-        <Button text="Supprimer" onAction="#handleSupprimerFournisseur" styleClass="delete-button"/>
+    <HBox alignment="CENTER" spacing="10">
+        <Button onAction="#handleAjouterFournisseur" styleClass="submit-button" text="Ajouter" />
+        <Button onAction="#handleModifierFournisseur" styleClass="edit-button" text="Modifier" />
+        <Button onAction="#handleSupprimerFournisseur" styleClass="delete-button" text="Supprimer" />
     </HBox>
 
     <TableView fx:id="fournisseurTableView" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Nom" fx:id="nomColumn"/>
-            <TableColumn text="Adresse" fx:id="adresseColumn"/>
-            <TableColumn text="Téléphone" fx:id="telephoneColumn"/>
-            <TableColumn text="Email" fx:id="emailColumn"/>
+            <TableColumn fx:id="nomColumn" text="Nom" />
+            <TableColumn fx:id="adresseColumn" text="Adresse" />
+            <TableColumn fx:id="telephoneColumn" text="Téléphone" />
+            <TableColumn fx:id="emailColumn" text="Email" />
         </columns>
     </TableView>
 </VBox>
-

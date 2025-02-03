@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.EtudiantController"
-      spacing="10" alignment="CENTER" styleClass="form-container">
+<VBox alignment="CENTER" spacing="10" styleClass="form-container" stylesheets="@../styles/global.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.gestionevenements.controllers.EtudiantController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
-    <Label text="Gestion des étudiants" styleClass="title-label"/>
+    <Label styleClass="title-label" stylesheets="@../styles/global.css" text="Gestion des étudiants" />
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Ajouter" onAction="#handleAjouterEtudiant" styleClass="add-button"/>
-        <Button text="Modifier" onAction="#handleModifierEtudiant" styleClass="edit-button"/>
-        <Button text="Supprimer" onAction="#handleSupprimerEtudiant" styleClass="delete-button"/>
+    <HBox alignment="CENTER" spacing="10">
+        <Button onAction="#handleAjouterEtudiant" styleClass="add-button" text="Ajouter" />
+        <Button onAction="#handleModifierEtudiant" styleClass="edit-button" text="Modifier" />
+        <Button onAction="#handleSupprimerEtudiant" styleClass="delete-button" text="Supprimer" />
     </HBox>
 
-    <TableView fx:id="etudiantTableView" VBox.vgrow="ALWAYS">
+    <TableView fx:id="etudiantTableView" stylesheets="@../styles/global.css" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Nom" fx:id="nomColumn"/>
-            <TableColumn text="Prénom" fx:id="prenomColumn"/>
-            <TableColumn text="Email" fx:id="emailColumn"/>
+            <TableColumn fx:id="nomColumn" text="Nom" />
+            <TableColumn fx:id="prenomColumn" text="Prénom" />
+            <TableColumn fx:id="emailColumn" text="Email" />
         </columns>
     </TableView>
 </VBox>
-

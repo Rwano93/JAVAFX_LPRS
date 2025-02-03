@@ -232,5 +232,14 @@ public class DashboardController implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+    public void initializeWithRole(String role) {
+        userRole = role;
+        setupMenuItems();
+        setupSummary();
+        setupRecentActivities();
+        setupQuickActions();
+        setupInscriptionFilesTable();
+    }
 }
 

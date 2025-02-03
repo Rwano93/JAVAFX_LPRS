@@ -32,5 +32,17 @@ public class StockService {
     public Stock getStockById(int id) {
         return stockDAO.getById(id);
     }
+
+    public boolean ajusterQuantite(int stockId, int quantite) {
+        Stock stock = getStockById(stockId);
+        if (stock != null) {
+            int nouvelleQuantite = stock.getQuantite() + quantite;
+            if (nouvelleQuantite >= 0) {
+                stock.setQuantite(nouvelleQuantite);
+                return modifierStock(stock);
+            }
+        }
+        return false;
+    }
 }
 

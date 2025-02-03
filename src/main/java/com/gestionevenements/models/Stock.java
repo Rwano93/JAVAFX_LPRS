@@ -35,6 +35,15 @@ public class Stock {
     public StringProperty nomProduitProperty() { return nomProduit; }
     public IntegerProperty quantiteProperty() { return quantite; }
     public StringProperty emplacementProperty() { return emplacement; }
-}
 
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "id=" + getId() +
+                ", nomProduit='" + getNomProduit() + '\'' +
+                ", quantite=" + getQuantite() +
+                ", emplacement='" + getEmplacement() + '\'' +
+                '}';
+    }
+}
 

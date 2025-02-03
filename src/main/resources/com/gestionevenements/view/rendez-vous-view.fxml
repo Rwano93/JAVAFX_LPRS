@@ -1,38 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.RendezVousController"
-      spacing="10" alignment="CENTER" styleClass="form-container">
+<VBox alignment="CENTER" spacing="10" styleClass="form-container" stylesheets="@../styles/global.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.gestionevenements.controllers.RendezVousController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
-    <Label text="Gestion des rendez-vous" styleClass="title-label"/>
+    <Label styleClass="title-label" text="Gestion des rendez-vous" />
 
-    <HBox spacing="10" alignment="CENTER">
-        <ComboBox fx:id="etudiantComboBox" promptText="Sélectionner un étudiant"/>
-        <ComboBox fx:id="professeurComboBox" promptText="Sélectionner un professeur"/>
-        <DatePicker fx:id="datePicker" promptText="Sélectionner une date"/>
-        <ComboBox fx:id="heureComboBox" promptText="Sélectionner une heure"/>
-        <ComboBox fx:id="salleComboBox" promptText="Sélectionner une salle"/>
-        <Button fx:id="ajouterButton" text="Ajouter" onAction="#handleAjouterRendezVous"/>
+    <HBox alignment="CENTER" spacing="10">
+        <ComboBox fx:id="etudiantComboBox" promptText="Sélectionner un étudiant" />
+        <ComboBox fx:id="professeurComboBox" promptText="Sélectionner un professeur" />
+        <DatePicker fx:id="datePicker" promptText="Sélectionner une date" />
+        <ComboBox fx:id="heureComboBox" promptText="Sélectionner une heure" />
+        <ComboBox fx:id="salleComboBox" promptText="Sélectionner une salle" />
+        <Button fx:id="ajouterButton" onAction="#handleAjouterRendezVous" text="Ajouter" />
     </HBox>
 
     <TableView fx:id="rendezVousTableView" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Étudiant" fx:id="etudiantColumn"/>
-            <TableColumn text="Professeur" fx:id="professeurColumn"/>
-            <TableColumn text="Date" fx:id="dateColumn"/>
-            <TableColumn text="Heure" fx:id="heureColumn"/>
-            <TableColumn text="Salle" fx:id="salleColumn"/>
+            <TableColumn fx:id="etudiantColumn" text="Étudiant" />
+            <TableColumn fx:id="professeurColumn" text="Professeur" />
+            <TableColumn fx:id="dateColumn" text="Date" />
+            <TableColumn fx:id="heureColumn" text="Heure" />
+            <TableColumn fx:id="salleColumn" text="Salle" />
         </columns>
     </TableView>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="modifierButton" text="Modifier" onAction="#handleModifierRendezVous"/>
-        <Button fx:id="supprimerButton" text="Supprimer" onAction="#handleSupprimerRendezVous"/>
+    <HBox alignment="CENTER" spacing="10">
+        <Button fx:id="modifierButton" onAction="#handleModifierRendezVous" text="Modifier" />
+        <Button fx:id="supprimerButton" onAction="#handleSupprimerRendezVous" text="Supprimer" />
     </HBox>
 </VBox>

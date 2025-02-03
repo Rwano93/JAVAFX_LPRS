@@ -1,67 +1,49 @@
-package com.gestionevenements.controllers;
+<?xml version="1.0" encoding="UTF-8"?>
 
-        import com.gestionevenements.utils.SessionManager;
-        import javafx.fxml.FXML;
-        import javafx.fxml.FXMLLoader;
-        import javafx.scene.Parent;
-        import javafx.scene.Scene;
-        import javafx.scene.control.Label;
-        import javafx.stage.Stage;
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-        import java.io.IOException;
+<VBox alignment="CENTER" spacing="10" styleClass="form-container" stylesheets="@../styles/global.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.gestionevenements.controllers.StockController">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
 
-        public class DashboardController {
+    <Label styleClass="title-label" text="Gestion des stocks" />
 
-        @FXML
-        private Label userInfoLabel;
+    <GridPane hgap="10" vgap="10">
+        <TextField fx:id="nomProduitField" promptText="Nom du produit" styleClass="form-field" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="quantiteField" promptText="Quantité" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="emplacementField" promptText="Emplacement" styleClass="form-field" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
 
-        @FXML
-        public void initialize() {
-        String userEmail = SessionManager.getInstance().getLoggedInUser();
-        String userRole = SessionManager.getInstance().getUserRole();
-        userInfoLabel.setText("Connecté en tant que: " + userEmail + " (" + userRole + ")");
-        }
+    <HBox alignment="CENTER" spacing="10">
+        <Button onAction="#handleAjouterStock" styleClass="submit-button" text="Ajouter" />
+        <Button onAction="#handleModifierStock" styleClass="edit-button" text="Modifier" />
+        <Button onAction="#handleSupprimerStock" styleClass="delete-button" text="Supprimer" />
+    </HBox>
 
-        @FXML
-        private void handleLogout() {
-        SessionManager.getInstance().logout();
-        navigateToLogin();
-        }
-
-        @FXML
-        private void showEtudiantsView() {
-        navigateTo("etudiant-view.fxml");
-        }
-
-        @FXML
-        private void showRendezVousView() {
-        navigateTo("rendez-vous-view.fxml");
-        }
-
-        @FXML
-        private void showFournituresView() {
-        navigateTo("fourniture-view.fxml");
-        }
-
-        @FXML
-        private void showReportsView() {
-        // TODO: Implémenter la vue des rapports
-        }
-
-        private void navigateToLogin() {
-        navigateTo("login-view.fxml");
-        }
-
-        private void navigateTo(String fxmlFile) {
-        try {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/gestionevenements/" + fxmlFile));
-        Stage stage = (Stage) userInfoLabel.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-        } catch (IOException e) {
-        e.printStackTrace();
-        // TODO: Afficher une alerte d'erreur
-        }
-        }
-        }
-
+    <TableView fx:id="stockTableView" onMouseClicked="#handleSelectionStock" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="nomProduitColumn" text="Nom du produit" />
+            <TableColumn fx:id="quantiteColumn" text="Quantité" />
+            <TableColumn fx:id="emplacementColumn" text="Emplacement" />
+        </columns>
+    </TableView>
+</VBox>

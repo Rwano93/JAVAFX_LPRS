@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.LoginController">
-    <VBox alignment="CENTER" spacing="20" maxWidth="400">
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.gestionevenements.controllers.LoginController">
+    <VBox alignment="CENTER" maxWidth="400" spacing="20" stylesheets="@../styles/global.css">
         <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
+            <Insets bottom="20" left="20" right="20" top="20" />
         </padding>
 
-        <Label text="Gestion d'Événements" style="-fx-font-size: 24px;"/>
+        <Label style="-fx-font-size: 24px;" stylesheets="@../styles/global.css" text="Gestion d'Événements" />
 
-        <TabPane>
+        <TabPane stylesheets="@../styles/global.css">
             <Tab text="Connexion">
                 <VBox spacing="10">
-                    <TextField fx:id="emailFieldLogin" promptText="Email"/>
-                    <PasswordField fx:id="passwordFieldLogin" promptText="Mot de passe"/>
-                    <Button text="Se connecter" onAction="#handleLogin" maxWidth="Infinity"/>
+                    <TextField fx:id="emailFieldLogin" promptText="Email" stylesheets="@../styles/global.css" />
+                    <PasswordField fx:id="passwordFieldLogin" promptText="Mot de passe" stylesheets="@../styles/global.css" />
+                    <Button maxWidth="Infinity" onAction="#handleLogin" text="Se connecter" />
                 </VBox>
             </Tab>
             <Tab text="Inscription">
                 <VBox spacing="10">
-                    <TextField fx:id="nomFieldRegister" promptText="Nom"/>
-                    <TextField fx:id="prenomFieldRegister" promptText="Prénom"/>
-                    <TextField fx:id="emailFieldRegister" promptText="Email"/>
-                    <PasswordField fx:id="passwordFieldRegister" promptText="Mot de passe"/>
-                    <ComboBox fx:id="roleComboBox" promptText="Rôle"/>
-                    <Button text="S'inscrire" onAction="#handleRegister" maxWidth="Infinity"/>
+                    <TextField fx:id="nomFieldRegister" promptText="Nom" stylesheets="@../styles/global.css" />
+                    <TextField fx:id="prenomFieldRegister" promptText="Prénom" stylesheets="@../styles/global.css" />
+                    <TextField fx:id="emailFieldRegister" promptText="Email" stylesheets="@../styles/global.css" />
+                    <PasswordField fx:id="passwordFieldRegister" promptText="Mot de passe" stylesheets="@../styles/global.css" />
+                    <ComboBox fx:id="roleComboBox" promptText="Rôle" stylesheets="@../styles/global.css" />
+                    <Button maxWidth="Infinity" onAction="#handleRegister" stylesheets="@../styles/global.css" text="S'inscrire" />
                 </VBox>
             </Tab>
         </TabPane>
     </VBox>
 </StackPane>
-

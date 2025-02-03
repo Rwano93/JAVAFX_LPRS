@@ -101,10 +101,9 @@ public class DashboardController implements Initializable {
 
     private void setupRecentActivities() {
         ObservableList<String> activities = FXCollections.observableArrayList(
-                "Nouvel étudiant inscrit: Jean Dupont",
-                "Rendez-vous ajouté: Prof. Martin - 15:00",
-                "Stock mis à jour: +50 stylos",
-                "Dossier d'inscription validé: Marie Curie"
+                "Rendez-vous ajouté par Professeur X",
+                "Dossier d'inscription validé pour Etudiant Y",
+                "Stock de fournitures mis à jour"
         );
         recentActivitiesList.setItems(activities);
     }
@@ -167,63 +166,105 @@ public class DashboardController implements Initializable {
     @FXML
     private void handleLogout() {
         SessionManager.getInstance().logout();
-        navigateToLogin();
+        navigateTo("login-view.fxml");
     }
 
     private void showEtudiantsView() {
-        navigateTo("/com/gestionevenements/view/etudiant-view.fxml");
+        navigateTo("etudiant-view.fxml");
     }
 
     private void showRendezVousView() {
-        navigateTo("/com/gestionevenements/view/rendez-vous-view.fxml");
+        navigateTo("rendez-vous-view.fxml");
     }
 
     private void showFournituresView() {
-        navigateTo("/com/gestionevenements/view/fourniture-view.fxml");
+        navigateTo("fourniture-view.fxml");
     }
 
     private void showStocksView() {
-        navigateTo("/com/gestionevenements/view/stock-view.fxml");
+        navigateTo("stock-view.fxml");
     }
 
     private void showInscriptionsView() {
-        navigateTo("/com/gestionevenements/view/inscription-view.fxml");
+        navigateTo("inscription-view.fxml");
     }
 
     private void showFournisseursView() {
-        navigateTo("/com/gestionevenements/view/fournisseur-view.fxml");
+        navigateTo("fournisseur-view.fxml");
     }
 
-    private void showMyInscriptionFile() {
 
+    private void showMyInscriptionFile() {
+        // Implement the logic to show the student's own inscription file
+        String userEmail = SessionManager.getInstance().getLoggedInUser();
+        DossierInscription dossier = inscriptionService.getDossierInscriptionByEmail(userEmail);
+        if (dossier != null) {
+            showAlert(Alert.AlertType.INFORMATION, "Dossier d'inscription", dossier.toString());
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Dossier non trouvé", "Aucun dossier d'inscription trouvé pour cet étudiant.");
+        }
     }
 
     private void showEmploiDuTemps() {
-
+        // Implement the logic to show the professor's schedule
+        showAlert(Alert.AlertType.INFORMATION, "Emploi du temps", "Fonctionnalité à implémenter : Affichage de l'emploi du temps du professeur.");
     }
 
     private void showCommandeFournitures() {
-
+        // Implement the logic to show the supply order form
+        showAlert(Alert.AlertType.INFORMATION, "Commande de fournitures", "Fonctionnalité à implémenter : Formulaire de commande de fournitures.");
     }
 
     private void navigateToLogin() {
-        navigateTo("/com/gestionevenements/view/login-view.fxml");
+        navigateTo("login-view.fxml");
     }
 
     private void navigateTo(String fxmlFile) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/gestionevenements/view/" + fxmlFile));
+            String fxmlPath = "/com/gestionevenements/view/" + fxmlFile;
+            URL fxmlLocation = getClass().getResource(fxmlPath);
+
+            if (fxmlLocation == null) {
+                throw new IOException("Fichier FXML introuvable : " + fxmlPath);
+            }
+
+            System.out.println("Chargement de la vue : " + fxmlFile);
+
+            FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();
+
+            Object controller = loader.getController();
+            if (controller == null) {
+                throw new NullPointerException("Le contrôleur pour " + fxmlFile + " est NULL.");
+            }
+
+            System.out.println("Contrôleur chargé avec succès pour " + fxmlFile);
+
             Stage stage = (Stage) userInfoLabel.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/styles/global.css").toExternalForm());
+
+            String cssPath = "/com/gestionevenements/styles/global.css";
+            URL cssLocation = getClass().getResource(cssPath);
+            if (cssLocation != null) {
+                scene.getStylesheets().add(cssLocation.toExternalForm());
+                System.out.println("Styles CSS appliqués depuis : " + cssPath);
+            } else {
+                System.err.println("Fichier CSS introuvable : " + cssPath);
+            }
+
             stage.setScene(scene);
             stage.show();
+            System.out.println("Navigation réussie vers : " + fxmlFile);
+
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur de navigation", "Impossible de charger la page demandée.");
+            showAlert(Alert.AlertType.ERROR, "Erreur de navigation", "Impossible de charger la vue demandée : " + fxmlFile + "\n" + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur Inattendue", "Une erreur est survenue lors du chargement de la vue : " + fxmlFile + "\n" + e.getMessage());
         }
     }
+
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
@@ -236,10 +277,7 @@ public class DashboardController implements Initializable {
     public void initializeWithRole(String role) {
         userRole = role;
         setupMenuItems();
-        setupSummary();
-        setupRecentActivities();
         setupQuickActions();
-        setupInscriptionFilesTable();
     }
 }
 

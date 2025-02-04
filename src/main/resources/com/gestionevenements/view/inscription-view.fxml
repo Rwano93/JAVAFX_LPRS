@@ -30,5 +30,6 @@
         <Button onAction="#handleModifierInscription" text="Modifier" />
         <Button onAction="#handleSupprimerInscription" text="Supprimer" />
         <Button onAction="#handleVoirDetailsInscription" text="Voir détails" />
+
     </HBox>
 </VBox>

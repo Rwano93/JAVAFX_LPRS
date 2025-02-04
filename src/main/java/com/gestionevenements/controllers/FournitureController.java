@@ -2,9 +2,13 @@ package com.gestionevenements.controllers;
 
 import com.gestionevenements.models.Fourniture;
 import com.gestionevenements.services.FournitureService;
+import com.gestionevenements.utils.NavigationUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class FournitureController {
 
@@ -106,6 +110,15 @@ public class FournitureController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    @FXML
+    private void handleBack() {
+        try {
+            NavigationUtil.goToDashboard((Stage) fournitureListView.getScene().getWindow());
+        } catch (IOException e) {
+            e.printStackTrace();
+            showErrorAlert("Erreur", "Impossible de revenir à la page précédente.");
+        }
     }
 }
 

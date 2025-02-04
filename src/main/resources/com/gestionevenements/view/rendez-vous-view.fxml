@@ -39,5 +39,6 @@
     <HBox alignment="CENTER" spacing="10">
         <Button fx:id="modifierButton" onAction="#handleModifierRendezVous" text="Modifier" />
         <Button fx:id="supprimerButton" onAction="#handleSupprimerRendezVous" text="Supprimer" />
+        <Button onAction="#handleBack" styleClass="back-button" text="Retour" />
     </HBox>
 </VBox>

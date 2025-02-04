@@ -38,6 +38,7 @@
         <Button onAction="#handleAjouterFournisseur" styleClass="submit-button" text="Ajouter" />
         <Button onAction="#handleModifierFournisseur" styleClass="edit-button" text="Modifier" />
         <Button onAction="#handleSupprimerFournisseur" styleClass="delete-button" text="Supprimer" />
+        <Button onAction="#handleBack" styleClass="back-button" text="Retour" />
     </HBox>
 
     <TableView fx:id="fournisseurTableView" VBox.vgrow="ALWAYS">

@@ -2,11 +2,14 @@ package com.gestionevenements.controllers;
 
 import com.gestionevenements.models.Stock;
 import com.gestionevenements.services.StockService;
+import com.gestionevenements.utils.NavigationUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -142,5 +145,14 @@ public class StockController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
+    }
+    @FXML
+    private void handleBack() {
+        try {
+            NavigationUtil.goToDashboard((Stage) stockTableView.getScene().getWindow());
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de revenir à la page précédente.");
+        }
     }
 }

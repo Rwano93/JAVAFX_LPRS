@@ -37,6 +37,7 @@
         <Button onAction="#handleAjouterStock" styleClass="submit-button" text="Ajouter" />
         <Button onAction="#handleModifierStock" styleClass="edit-button" text="Modifier" />
         <Button onAction="#handleSupprimerStock" styleClass="delete-button" text="Supprimer" />
+        <Button onAction="#handleBack" styleClass="back-button" text="Retour" />
     </HBox>
 
     <TableView fx:id="stockTableView" onMouseClicked="#handleSelectionStock" VBox.vgrow="ALWAYS">
@@ -44,6 +45,7 @@
             <TableColumn fx:id="nomProduitColumn" text="Nom du produit" />
             <TableColumn fx:id="quantiteColumn" text="Quantité" />
             <TableColumn fx:id="emplacementColumn" text="Emplacement" />
+
         </columns>
     </TableView>
 </VBox>

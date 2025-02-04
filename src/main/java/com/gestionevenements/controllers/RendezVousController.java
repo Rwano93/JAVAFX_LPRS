@@ -3,12 +3,15 @@ package com.gestionevenements.controllers;
 import com.gestionevenements.models.RendezVous;
 import com.gestionevenements.models.Salle;
 import com.gestionevenements.services.RendezVousService;
+import com.gestionevenements.utils.NavigationUtil;
 import com.gestionevenements.utils.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -180,4 +183,15 @@ public class RendezVousController implements Initializable {
         alert.setContentText(content);
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
+    @FXML
+    private void handleBack() {
+        try {
+            NavigationUtil.goToDashboard((Stage) rendezVousTableView.getScene().getWindow());
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de revenir à la page précédente.");
+        }
+    }
+
+
 }

@@ -40,6 +40,7 @@
     <HBox alignment="CENTER" spacing="10">
         <Button onAction="#handleAjouterFourniture" styleClass="submit-button" text="Ajouter" />
         <Button onAction="#handleSupprimerFourniture" styleClass="delete-button" text="Supprimer" />
+        <Button onAction="#handleBack" styleClass="back-button" text="Retour" />
     </HBox>
 
     <ListView fx:id="fournitureListView" VBox.vgrow="ALWAYS" />

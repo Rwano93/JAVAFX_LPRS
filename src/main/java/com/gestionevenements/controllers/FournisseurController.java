@@ -2,9 +2,13 @@ package com.gestionevenements.controllers;
 
 import com.gestionevenements.models.Fournisseur;
 import com.gestionevenements.services.FournisseurService;
+import com.gestionevenements.utils.NavigationUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class FournisseurController {
 
@@ -27,7 +31,7 @@ public class FournisseurController {
     @FXML
     private TableColumn<Fournisseur, String> emailColumn;
 
-    private FournisseurService fournisseurService;
+    private final FournisseurService fournisseurService;
 
     public FournisseurController() {
         this.fournisseurService = new FournisseurService();
@@ -55,7 +59,7 @@ public class FournisseurController {
             clearFields();
             updateFournisseurList();
         } else {
-            showAlert("Erreur", "Impossible d'ajouter le fournisseur.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ajouter le fournisseur.");
         }
     }
 
@@ -73,10 +77,10 @@ public class FournisseurController {
                 clearFields();
                 updateFournisseurList();
             } else {
-                showAlert("Erreur", "Impossible de modifier le fournisseur.");
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de modifier le fournisseur.");
             }
         } else {
-            showAlert("Erreur", "Veuillez sélectionner un fournisseur à modifier.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner un fournisseur à modifier.");
         }
     }
 
@@ -90,11 +94,11 @@ public class FournisseurController {
                 if (success) {
                     updateFournisseurList();
                 } else {
-                    showAlert("Erreur", "Impossible de supprimer le fournisseur.");
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de supprimer le fournisseur.");
                 }
             }
         } else {
-            showAlert("Erreur", "Veuillez sélectionner un fournisseur à supprimer.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner un fournisseur à supprimer.");
         }
     }
 
@@ -105,7 +109,7 @@ public class FournisseurController {
         emailField.clear();
     }
 
-    private void showAlert(String title, String content) {
+    private void showAlert(Alert.AlertType error, String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -120,5 +124,15 @@ public class FournisseurController {
         alert.setContentText(content);
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
+    @FXML
+    private void handleBack() {
+        try {
+            NavigationUtil.goToDashboard((Stage) fournisseurTableView.getScene().getWindow());
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de revenir à la page précédente.");
+        }
+    }
+
 }
 

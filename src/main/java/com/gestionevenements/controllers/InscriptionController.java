@@ -2,6 +2,7 @@ package com.gestionevenements.controllers;
 
 import com.gestionevenements.models.Etudiant;
 import com.gestionevenements.services.InscriptionService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
@@ -92,6 +93,19 @@ public class InscriptionController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public void handleVoirDetailsInscription(ActionEvent actionEvent) {
+        
+    }
+
+    public void handleSupprimerInscription(ActionEvent actionEvent) {
+    }
+
+    public void handleModifierInscription(ActionEvent actionEvent) {
+    }
+
+    public void handleAjouterInscription(ActionEvent actionEvent) {
     }
 }
 

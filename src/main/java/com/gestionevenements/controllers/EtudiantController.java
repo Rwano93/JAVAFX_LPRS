@@ -2,9 +2,13 @@ package com.gestionevenements.controllers;
 
 import com.gestionevenements.models.Etudiant;
 import com.gestionevenements.services.EtudiantService;
+import com.gestionevenements.utils.NavigationUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class EtudiantController {
 
@@ -126,6 +130,18 @@ public class EtudiantController {
             showAlert("Erreur", "Veuillez sélectionner un étudiant à supprimer.");
         }
     }
+    @FXML
+    private void handleBack() {
+        try {
+            NavigationUtil.goToDashboard((Stage) etudiantTableView.getScene().getWindow());
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de retourner au tableau de bord.");
+        }
+    }
+
+
+
 
     private void clearFields() {
         nomField.clear();
@@ -151,5 +167,6 @@ public class EtudiantController {
         alert.setContentText(content);
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
+
 }
 

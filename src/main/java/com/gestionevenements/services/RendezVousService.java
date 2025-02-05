@@ -4,6 +4,7 @@ import com.gestionevenements.database.RendezVousDAO;
 import com.gestionevenements.database.SalleDAO;
 import com.gestionevenements.models.RendezVous;
 import com.gestionevenements.models.Salle;
+import com.gestionevenements.models.Utilisateur;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -42,11 +43,11 @@ public class RendezVousService {
         return rendezVousDAO.getByProfesseur(email);
     }
 
-    public List<String> getAllEtudiants() {
+    public List<Utilisateur> getAllEtudiants() {
         return rendezVousDAO.getAllEtudiants();
     }
 
-    public List<String> getAllProfesseurs() {
+    public List<Utilisateur> getAllProfesseurs() {
         return rendezVousDAO.getAllProfesseurs();
     }
 

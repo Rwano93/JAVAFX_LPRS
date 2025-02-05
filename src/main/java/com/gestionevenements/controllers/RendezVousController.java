@@ -2,6 +2,7 @@ package com.gestionevenements.controllers;
 
 import com.gestionevenements.models.RendezVous;
 import com.gestionevenements.models.Salle;
+import com.gestionevenements.models.Utilisateur;
 import com.gestionevenements.services.RendezVousService;
 import com.gestionevenements.utils.NavigationUtil;
 import com.gestionevenements.utils.SessionManager;
@@ -10,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,8 +21,8 @@ import java.util.ResourceBundle;
 
 public class RendezVousController implements Initializable {
 
-    @FXML private ComboBox<String> etudiantComboBox;
-    @FXML private ComboBox<String> professeurComboBox;
+    @FXML private ComboBox<Utilisateur> etudiantComboBox;
+    @FXML private ComboBox<Utilisateur> professeurComboBox;
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<LocalTime> heureComboBox;
     @FXML private ComboBox<Salle> salleComboBox;
@@ -52,7 +54,31 @@ public class RendezVousController implements Initializable {
 
     private void setupComboBoxes() {
         etudiantComboBox.setItems(FXCollections.observableArrayList(rendezVousService.getAllEtudiants()));
+        etudiantComboBox.setConverter(new StringConverter<Utilisateur>() {
+            @Override
+            public String toString(Utilisateur user) {
+                return user.getNom() + " " + user.getPrenom();
+            }
+
+            @Override
+            public Utilisateur fromString(String string) {
+                return null;
+            }
+        });
+
         professeurComboBox.setItems(FXCollections.observableArrayList(rendezVousService.getAllProfesseurs()));
+        professeurComboBox.setConverter(new StringConverter<Utilisateur>() {
+            @Override
+            public String toString(Utilisateur user) {
+                return user.getNom() + " " + user.getPrenom();
+            }
+
+            @Override
+            public Utilisateur fromString(String string) {
+                return null;
+            }
+        });
+
         salleComboBox.setItems(FXCollections.observableArrayList(rendezVousService.getAllSalles()));
 
         LocalTime start = LocalTime.of(8, 0);
@@ -92,20 +118,26 @@ public class RendezVousController implements Initializable {
         if ("ETUDIANT".equals(userRole)) {
             etudiantComboBox.setDisable(true);
             String userEmail = SessionManager.getInstance().getLoggedInUser();
-            etudiantComboBox.setValue(userEmail);
+            etudiantComboBox.setValue(rendezVousService.getAllEtudiants().stream()
+                    .filter(e -> e.getEmail().equals(userEmail))
+                    .findFirst()
+                    .orElse(null));
         }
 
         if ("PROFESSEUR".equals(userRole)) {
             professeurComboBox.setDisable(true);
             String userEmail = SessionManager.getInstance().getLoggedInUser();
-            professeurComboBox.setValue(userEmail);
+            professeurComboBox.setValue(rendezVousService.getAllProfesseurs().stream()
+                    .filter(p -> p.getEmail().equals(userEmail))
+                    .findFirst()
+                    .orElse(null));
         }
     }
 
     @FXML
     private void handleAjouterRendezVous() {
-        String etudiant = etudiantComboBox.getValue();
-        String professeur = professeurComboBox.getValue();
+        Utilisateur etudiant = etudiantComboBox.getValue();
+        Utilisateur professeur = professeurComboBox.getValue();
         LocalDate date = datePicker.getValue();
         LocalTime heure = heureComboBox.getValue();
         Salle salle = salleComboBox.getValue();
@@ -115,7 +147,7 @@ public class RendezVousController implements Initializable {
             return;
         }
 
-        RendezVous rendezVous = new RendezVous(0, etudiant, professeur, date, heure, salle);
+        RendezVous rendezVous = new RendezVous(0, etudiant.getEmail(), professeur.getEmail(), date, heure, salle);
         boolean success = rendezVousService.prendreRendezVous(rendezVous);
 
         if (success) {
@@ -131,8 +163,14 @@ public class RendezVousController implements Initializable {
     private void handleModifierRendezVous() {
         RendezVous selectedRendezVous = rendezVousTableView.getSelectionModel().getSelectedItem();
         if (selectedRendezVous != null) {
-            etudiantComboBox.setValue(selectedRendezVous.getEtudiant());
-            professeurComboBox.setValue(selectedRendezVous.getProfesseur());
+            etudiantComboBox.setValue(rendezVousService.getAllEtudiants().stream()
+                    .filter(e -> e.getEmail().equals(selectedRendezVous.getEtudiant()))
+                    .findFirst()
+                    .orElse(null));
+            professeurComboBox.setValue(rendezVousService.getAllProfesseurs().stream()
+                    .filter(p -> p.getEmail().equals(selectedRendezVous.getProfesseur()))
+                    .findFirst()
+                    .orElse(null));
             datePicker.setValue(selectedRendezVous.getDate());
             heureComboBox.setValue(selectedRendezVous.getHeure());
             salleComboBox.setValue(selectedRendezVous.getSalle());
@@ -183,6 +221,7 @@ public class RendezVousController implements Initializable {
         alert.setContentText(content);
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
+
     @FXML
     private void handleBack() {
         try {
@@ -192,6 +231,4 @@ public class RendezVousController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de revenir à la page précédente.");
         }
     }
-
-
 }

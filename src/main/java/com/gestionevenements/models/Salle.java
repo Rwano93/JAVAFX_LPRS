@@ -33,11 +33,7 @@ public class Salle {
 
     @Override
     public String toString() {
-        return "Salle{" +
-                "id=" + getId() +
-                ", nom='" + getNom() + '\'' +
-                ", capacite=" + getCapacite() +
-                '}';
+        return getNom();
     }
 }
 

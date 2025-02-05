@@ -2,6 +2,7 @@ package com.gestionevenements.database;
 
 import com.gestionevenements.models.RendezVous;
 import com.gestionevenements.models.Salle;
+import com.gestionevenements.models.Utilisateur;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -144,14 +145,21 @@ public class RendezVousDAO {
         return false;
     }
 
-    public List<String> getAllEtudiants() {
-        List<String> etudiants = new ArrayList<>();
-        String query = "SELECT DISTINCT etudiant FROM rendez_vous";
+    public List<Utilisateur> getAllEtudiants() {
+        List<Utilisateur> etudiants = new ArrayList<>();
+        String query = "SELECT * FROM utilisateurs WHERE role = 'ETUDIANT'";
         try (Connection conn = ConnexionBD.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
-                etudiants.add(rs.getString("etudiant"));
+                etudiants.add(new Utilisateur(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getString("mot_de_passe"),
+                        rs.getString("role")
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -159,14 +167,21 @@ public class RendezVousDAO {
         return etudiants;
     }
 
-    public List<String> getAllProfesseurs() {
-        List<String> professeurs = new ArrayList<>();
-        String query = "SELECT DISTINCT professeur FROM rendez_vous";
+    public List<Utilisateur> getAllProfesseurs() {
+        List<Utilisateur> professeurs = new ArrayList<>();
+        String query = "SELECT * FROM utilisateurs WHERE role = 'PROFESSEUR'";
         try (Connection conn = ConnexionBD.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
-                professeurs.add(rs.getString("professeur"));
+                professeurs.add(new Utilisateur(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getString("mot_de_passe"),
+                        rs.getString("role")
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();

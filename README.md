@@ -52,7 +52,9 @@ Ce projet est une application de gestion d'événements développée en JavaFX. 
 4. Suivre et gérer les événements en temps réel.
 
 ## Captures d'écran
-(Insérez ici des captures d'écran de votre application en action.)
+<img width="801" alt="Capture d’écran 2025-02-05 à 15 59 34" src="https://github.com/user-attachments/assets/da477d7e-4fe8-40c5-a61d-f6344b7ebba8" />
+<img width="1470" alt="Capture d’écran 2025-02-05 à 16 00 12" src="https://github.com/user-attachments/assets/42abf911-7c1a-4e79-a29b-fea9689d1b2f" />
+
 
 ## Contributions
 Les contributions sont les bienvenues ! Suivez ces étapes :

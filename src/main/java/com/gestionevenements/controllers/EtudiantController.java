@@ -69,21 +69,40 @@ public class EtudiantController {
 
     @FXML
     private void handleAjouterEtudiant() {
+        if (nomField == null || prenomField == null || emailField == null ||
+                dernierDiplomeField == null || telephoneField == null || adresseField == null) {
+            showAlert("Erreur", "Les champs du formulaire ne sont pas initialisés correctement.");
+            return;
+        }
+
+        String nom = nomField.getText();
+        String prenom = prenomField.getText();
+        String email = emailField.getText();
+        String dernierDiplome = dernierDiplomeField.getText();
+        String telephone = telephoneField.getText();
+        String adresse = adresseField.getText();
+
+        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty()) {
+            showAlert("Erreur", "Veuillez remplir tous les champs obligatoires (nom, prénom, email).");
+            return;
+        }
+
         Etudiant nouvelEtudiant = new Etudiant(
                 0,
-                nomField.getText(),
-                prenomField.getText(),
-                emailField.getText(),
-                "",  // Le mot de passe sera généré par le service
-                dernierDiplomeField.getText(),
-                telephoneField.getText(),
-                adresseField.getText()
+                nom,
+                prenom,
+                email,
+                "",  // le mot de passe sera généré et envoyé par email
+                dernierDiplome,
+                telephone,
+                adresse
         );
 
         boolean success = etudiantService.ajouterEtudiant(nouvelEtudiant);
         if (success) {
             updateEtudiantList();
             clearFields();
+            showAlert("Succès", "L'étudiant a été ajouté avec succès.");
         } else {
             showAlert("Erreur", "Impossible d'ajouter l'étudiant.");
         }
@@ -104,6 +123,7 @@ public class EtudiantController {
             if (success) {
                 updateEtudiantList();
                 clearFields();
+                showAlert("Succès", "L'étudiant a été modifié avec succès.");
             } else {
                 showAlert("Erreur", "Impossible de modifier l'étudiant.");
             }
@@ -122,6 +142,7 @@ public class EtudiantController {
                 if (success) {
                     updateEtudiantList();
                     clearFields();
+                    showAlert("Succès", "L'étudiant a été supprimé avec succès.");
                 } else {
                     showAlert("Erreur", "Impossible de supprimer l'étudiant.");
                 }
@@ -130,6 +151,7 @@ public class EtudiantController {
             showAlert("Erreur", "Veuillez sélectionner un étudiant à supprimer.");
         }
     }
+
     @FXML
     private void handleBack() {
         try {
@@ -139,9 +161,6 @@ public class EtudiantController {
             showAlert("Erreur", "Impossible de retourner au tableau de bord.");
         }
     }
-
-
-
 
     private void clearFields() {
         nomField.clear();
@@ -153,7 +172,7 @@ public class EtudiantController {
     }
 
     private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -167,6 +186,4 @@ public class EtudiantController {
         alert.setContentText(content);
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
-
 }
-

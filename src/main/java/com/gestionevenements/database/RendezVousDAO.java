@@ -12,7 +12,7 @@ import java.util.List;
 public class RendezVousDAO {
 
     public int ajouter(RendezVous rendezVous) {
-        String query = "INSERT INTO rendez_vous (etudiant, professeur, date, heure, salle_id) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO rendez_vous (etudiant_id, professeur_id, date, heure, salle_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConnexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, rendezVous.getEtudiant());
@@ -40,6 +40,25 @@ public class RendezVousDAO {
         return -1;
     }
 
+    public boolean modifier(RendezVous rendezVous) {
+        String query = "UPDATE rendez_vous SET etudiant_id = ?, professeur_id = ?, date = ?, heure = ?, salle_id = ? WHERE id = ?";
+        try (Connection conn = ConnexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, rendezVous.getEtudiant());
+            stmt.setString(2, rendezVous.getProfesseur());
+            stmt.setDate(3, Date.valueOf(rendezVous.getDate()));
+            stmt.setTime(4, Time.valueOf(rendezVous.getHeure()));
+            stmt.setInt(5, rendezVous.getSalle().getId());
+            stmt.setInt(6, rendezVous.getId());
+
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean supprimer(int id) {
         String query = "DELETE FROM rendez_vous WHERE id = ?";
         try (Connection conn = ConnexionBD.getConnection();
@@ -63,8 +82,8 @@ public class RendezVousDAO {
                 Salle salle = new Salle(rs.getInt("salle_id"), rs.getString("salle_nom"), rs.getInt("salle_capacite"));
                 RendezVous rendezVous = new RendezVous(
                         rs.getInt("id"),
-                        rs.getString("etudiant"),
-                        rs.getString("professeur"),
+                        rs.getString("etudiant_id"),
+                        rs.getString("professeur_id"),
                         rs.getDate("date").toLocalDate(),
                         rs.getTime("heure").toLocalTime(),
                         salle
@@ -79,7 +98,7 @@ public class RendezVousDAO {
 
     public List<RendezVous> getByEtudiant(String email) {
         List<RendezVous> rendezVousList = new ArrayList<>();
-        String query = "SELECT r.*, s.nom as salle_nom, s.capacite as salle_capacite FROM rendez_vous r JOIN salles s ON r.salle_id = s.id WHERE r.etudiant = ?";
+        String query = "SELECT r.*, s.nom as salle_nom, s.capacite as salle_capacite FROM rendez_vous r JOIN salles s ON r.salle_id = s.id WHERE r.etudiant_id = ?";
         try (Connection conn = ConnexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, email);
@@ -88,8 +107,8 @@ public class RendezVousDAO {
                 Salle salle = new Salle(rs.getInt("salle_id"), rs.getString("salle_nom"), rs.getInt("salle_capacite"));
                 RendezVous rendezVous = new RendezVous(
                         rs.getInt("id"),
-                        rs.getString("etudiant"),
-                        rs.getString("professeur"),
+                        rs.getString("etudiant_id"),
+                        rs.getString("professeur_id"),
                         rs.getDate("date").toLocalDate(),
                         rs.getTime("heure").toLocalTime(),
                         salle
@@ -104,7 +123,7 @@ public class RendezVousDAO {
 
     public List<RendezVous> getByProfesseur(String email) {
         List<RendezVous> rendezVousList = new ArrayList<>();
-        String query = "SELECT r.*, s.nom as salle_nom, s.capacite as salle_capacite FROM rendez_vous r JOIN salles s ON r.salle_id = s.id WHERE r.professeur = ?";
+        String query = "SELECT r.*, s.nom as salle_nom, s.capacite as salle_capacite FROM rendez_vous r JOIN salles s ON r.salle_id = s.id WHERE r.professeur_id = ?";
         try (Connection conn = ConnexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, email);
@@ -113,8 +132,8 @@ public class RendezVousDAO {
                 Salle salle = new Salle(rs.getInt("salle_id"), rs.getString("salle_nom"), rs.getInt("salle_capacite"));
                 RendezVous rendezVous = new RendezVous(
                         rs.getInt("id"),
-                        rs.getString("etudiant"),
-                        rs.getString("professeur"),
+                        rs.getString("etudiant_id"),
+                        rs.getString("professeur_id"),
                         rs.getDate("date").toLocalDate(),
                         rs.getTime("heure").toLocalTime(),
                         salle

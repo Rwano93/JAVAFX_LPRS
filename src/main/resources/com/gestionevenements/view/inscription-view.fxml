@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="10" styleClass="form-container" stylesheets="@../styles/global.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.gestionevenements.controllers.InscriptionController">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.gestionevenements.controllers.InscriptionController"
+      spacing="10" alignment="CENTER" styleClass="form-container">
     <padding>
-        <Insets bottom="20" left="20" right="20" top="20" />
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <Label styleClass="title-label" text="Gestion des dossiers d'inscription" />
+    <Label text="Gestion des dossiers d'inscription" styleClass="title-label"/>
 
-    <TableView fx:id="inscriptionTableView" stylesheets="@../styles/global.css" VBox.vgrow="ALWAYS">
+    <GridPane hgap="10" vgap="10">
+        <TextField fx:id="nomField" promptText="Nom" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="prenomField" promptText="Prénom" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="telephoneField" promptText="Téléphone" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <TextField fx:id="adresseField" promptText="Adresse" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="dernierDiplomeField" promptText="Dernier diplôme" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <TextField fx:id="filiereInteretField" promptText="Filière d'intérêt" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <DatePicker fx:id="dateInscriptionPicker" promptText="Date d'inscription" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <TextArea fx:id="motivationsArea" promptText="Motivations" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Ajouter" onAction="#handleAjouterInscription"/>
+        <Button text="Modifier" onAction="#handleModifierInscription"/>
+        <Button text="Supprimer" onAction="#handleSupprimerInscription"/>
+        <Button text="Voir détails" onAction="#handleVoirDetailsInscription"/>
+    </HBox>
+
+    <TableView fx:id="inscriptionTableView" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="nomColumn" text="Nom" />
-            <TableColumn fx:id="prenomColumn" text="Prénom" />
-            <TableColumn fx:id="dateInscriptionColumn" text="Date d'inscription" />
-            <TableColumn fx:id="filiereColumn" text="Filière" />
-            <TableColumn fx:id="statutColumn" text="Statut" />
+            <TableColumn text="Nom" fx:id="nomColumn"/>
+            <TableColumn text="Prénom" fx:id="prenomColumn"/>
+            <TableColumn text="Date d'inscription" fx:id="dateInscriptionColumn"/>
+            <TableColumn text="Filière" fx:id="filiereColumn"/>
+            <TableColumn text="Statut" fx:id="statutColumn"/>
         </columns>
     </TableView>
 
-    <HBox alignment="CENTER" spacing="10">
-        <Button onAction="#handleAjouterInscription" text="Ajouter" />
-        <Button onAction="#handleModifierInscription" text="Modifier" />
-        <Button onAction="#handleSupprimerInscription" text="Supprimer" />
-        <Button onAction="#handleVoirDetailsInscription" text="Voir détails" />
-
-    </HBox>
+    <Button text="Retour" onAction="#handleBack"/>
 </VBox>
+
